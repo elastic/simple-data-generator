@@ -1,0 +1,11 @@
+*.cert
+*.swp
+*.jks
+.gradle/*
+.idea/*
+out
+*.protect
+build/*
+*.log
+*.iml
+.DS_Store

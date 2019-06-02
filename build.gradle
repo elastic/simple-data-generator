@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id "org.sonarqube" version "2.6"
+}
+
+group 'com.pahlsoft.examples.simpledata'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+//create a single Jar with all dependencies
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Simple Load Generator',
+                'Implementation-Version': 1.0,
+                'Main-Class': 'com.pahlsoft.simpledata.runner.EngineRunner'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.0.1',
+            'org.slf4j:slf4j-api:1.7.25', 'ch.qos.logback:logback-classic:1.2.3', 'ch.qos.logback:logback-core:1.2.3',
+            'com.github.javafaker:javafaker:0.14', 'co.elastic.apm:apm-agent-api:1.6.1'
+
+}
+
+clean {
+    delete 'out', 'build', 'transaction-engine.log'
+}

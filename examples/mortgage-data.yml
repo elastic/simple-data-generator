@@ -1,0 +1,80 @@
+elasticsearchScheme: https
+elasticsearchHost: <NEED_THIS>
+elasticsearchPort: <NEED_THIS>
+elasticsearchUser: elastic
+elasticsearchPassword: <NEED_THIS>
+keystoreLocation: keystore.jks
+keystorePassword: <NEED_THIS>
+workloads:
+  - workloadName: mortgage_workload
+    workloadThreads: 1
+    workloadSleep: 1000
+    indexName: mortgage-data
+    fields:
+      - name: loan.platform
+        type: random_string_from_list
+        custom_list: Loan Advisor Portal (Portal),Correspondent Assignment Center (CAC),Loan Product Advisor (LPA),Loan Collateral Advisor Extension (LCAE),Loan Quality Advisor (LQA),Condo Project Advisor (CoPA),Loan Closing Advisor (LCLA),Loan Selling Advisor (LSA),Loan Coverage Advisor (LCVA)
+
+      - name: loan.id
+        type: uuid
+
+      - name: loan.type
+        type: random_string_from_list
+        custom_list: single-family,multi-family,commercial
+
+      - name: loan.amount
+        type: float
+        range: 10000,2000000
+
+      - name: loan.term.num_length
+        type: random_integer_from_list
+        custom_list: 15,30,35
+
+      - name: loan.term.cycle
+        type: random_string_from_list
+        custom_list: monthly,yearly
+
+      - name: location_via_ip
+        type: ipv4
+
+      - name: status.transaction
+        type: random_string_from_list
+        custom_list: started,processing,completed,failiure
+
+      - name: status.application
+        type: random_string_from_list
+        custom_list: approved,pending_approval,credit_review,decline
+
+      - name: demographics.income
+        type: float
+        range: 1000,200000
+ 
+      - name: demographics.occupation
+        type: random_occupation
+
+      - name: demographics.age
+        type: int
+        range: 18,99
+
+      - name: demographics.credit_score.equifax
+        type: int
+        range: 300,850
+
+      - name: demographics.credit_score.experian
+        type: int
+        range: 300,850
+
+      - name: demographics.credit_score.transunion
+        type: int
+        range: 300,850
+
+      - name: customer_experience_score
+        type: int
+        range: 1,10
+
+      - name: incident.status
+        type: random_string_from_list
+        custom_list: open,closed,triage
+
+      - name: incident.description
+        type: random_cn_fact

@@ -1,0 +1,36 @@
+elasticsearchScheme: https
+elasticsearchHost: <NEED_THIS>
+elasticsearchPort: <NEED_THIS>
+elasticsearchUser: elastic
+elasticsearchPassword: <NEED_THIS>
+keystoreLocation: keystore.jks
+keystorePassword: <NEED_THIS>
+workloads:
+  - workloadName: financial_workload
+    workloadThreads: 1
+    workloadSleep: 1000
+    indexName: financial-data
+    fields:
+      - name: account_number
+        type: int
+
+      - name: state
+        type: state
+
+      - name: balance
+        type: float
+        range: 1,20000
+
+      - name: account_token
+        type: uuid
+
+      - name: social_security_number
+        type: ssn
+
+      - name: occupation
+        type: random_string_from_list
+        custom_list: lead astronaut, pilot, ceo, programmer
+
+      - name: salary
+        type: random_float_from_list
+        custom_list: 100000.39, 123114.12, 66666.66
