@@ -2,9 +2,10 @@ package com.pahlsoft.simpledata.generator;
 
 import co.elastic.apm.api.CaptureSpan;
 import com.github.javafaker.Faker;
-import com.pahlsoft.simpledata.model.Workload;
 
 import java.util.*;
+
+import com.pahlsoft.simpledata.model.Workload;
 
 public class WorkloadGenerator {
 
@@ -75,6 +76,8 @@ public class WorkloadGenerator {
                 case "zipcode":
                     jsonMap.put("zipcode",faker.address().zipCodeByState(state));
                     break;
+                case "geo_point":
+                    jsonMap.put("geo_point","{\"lon:\" " + faker.address().longitude() + " }, {\"lat:\" " + faker.address().longitude() + "}");
                 case "phone_number":
                     jsonMap.put("phone_number",faker.phoneNumber().cellPhone());
                     break;
