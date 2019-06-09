@@ -1,0 +1,32 @@
+elasticsearchScheme: https
+elasticsearchHost: <NEED_THIS>
+elasticsearchPort: <NEED_THIS>
+elasticsearchUser: elastic
+elasticsearchPassword: <NEED_THIS>
+keystoreLocation: keystore.jks
+keystorePassword: <NEED_THIS>
+workloads:
+  - workloadName: ecs
+    workloadThreads: 1
+    workloadSleep: 250
+    indexName: ecs-sample-data
+    fields:
+      - name: container.id
+        type: uuid
+
+      - name: container.image.name
+        type:
+
+      - name: container.image.tag
+        type:
+
+      - name: container.labels
+        type: random_string_from_list
+        custom_list: middleware, front-end, back-end, web
+
+      - name: container.name
+        type: uuid
+
+      - name: container.runtime
+        type: random_string_from_list
+        custom_list: docker, kubernetes, gke, aws-ecs, openshift

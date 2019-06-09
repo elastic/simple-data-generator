@@ -1,0 +1,93 @@
+elasticsearchScheme: https
+elasticsearchHost: <NEED_THIS>
+elasticsearchPort: <NEED_THIS>
+elasticsearchUser: elastic
+elasticsearchPassword: <NEED_THIS>
+keystoreLocation: keystore.jks
+keystorePassword: <NEED_THIS>
+workloads:
+  - workloadName: ecs
+    workloadThreads: 1
+    workloadSleep: 250
+    indexName: ecs-sample-data
+    fields:
+       - name: server.address
+         type: ipv4
+
+       - name: server.bytes
+         type: int
+         range: 0,65536
+
+       - name: server.domain
+         type: random_string_from_list
+         custom_list: gmail.com,elastic.co,google.com
+
+       - name: server.geo.city_name
+         type: city
+
+       - name: server.geo.continent_name
+         type: random_string_from_list
+         custom_list: north_america,south_america,asia,europe,australia,antarctica,africa
+
+       - name: server.geo.country_iso_code
+         type: country_code
+
+       - name: server.geo.country_name
+         type: country
+
+       - name: server.geo.location
+         type: geo_point
+
+       - name: server.geo.name
+         type: random_string_from_list
+         custom_list: us-east-1a, us-east-1b, us-east-1c, frankfurt-1a, frankfurt-1b, frankfurt-1c
+
+       - name: server.geo.region_iso_code
+         type: country_code
+
+       - name: server.geo.region_name
+         type: country
+
+       - name: server.ip
+         type: ipv4
+
+       - name: server.mac
+         type: mac_address
+
+       - name: server.packets
+         type: long
+         range: 0,100000
+
+       - name: server.port
+         type: long
+         range: 0, 65536
+
+       - name: server.user.email
+         type: email
+
+       - name: server.user.full_name
+         type: full_name
+
+       - name: server.user.group.id
+         type: int
+         range: 1025,1031
+
+       - name: server.user.group.name
+         type: random_string_from_list
+         custom_list: admin, user, security, hacker, executive, scientist
+
+       - name: server.user.hash
+         type: hash
+
+       - name: server.user.id
+         type: int
+         range: 2048,10248
+
+       - name: server.user.name
+         type: first_name
+
+       - name: service.ephemeral_id
+         type: hash
+
+       - name: service.id
+         type: uuid

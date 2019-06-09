@@ -1,0 +1,45 @@
+elasticsearchScheme: https
+elasticsearchHost: <NEED_THIS>
+elasticsearchPort: <NEED_THIS>
+elasticsearchUser: elastic
+elasticsearchPassword: <NEED_THIS>
+keystoreLocation: keystore.jks
+keystorePassword: <NEED_THIS>
+workloads:
+  - workloadName: ecs
+    workloadThreads: 1
+    workloadSleep: 250
+    indexName: ecs-sample-data
+    fields:
+       - name: http.request.body.bytes
+         type: long
+         range: 1,9999999
+
+       - name: http.request.body.content
+         type: random_cn_fact
+
+       - name: http.request.bytes
+         type: long
+         range: 1,9999999
+
+       - name: http.request.referrer
+         type: url
+
+       - name: http.response.body.bytes
+         type: long
+         range: 1,9999999
+
+       - name: http.response.body.content
+         type: random_cn_fact
+
+       - name: http.response.bytes
+         type: long
+         range: 1,9999999
+
+       - name: http.response.status_code
+         type: int
+         range: 200,599
+
+       - name: http.version
+         type: random_string_from_list
+         custom_list: 0.9,1.0,1.1,2.0,3.0

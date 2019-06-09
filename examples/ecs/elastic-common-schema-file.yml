@@ -1,0 +1,55 @@
+elasticsearchScheme: https
+elasticsearchHost: <NEED_THIS>
+elasticsearchPort: <NEED_THIS>
+elasticsearchUser: elastic
+elasticsearchPassword: <NEED_THIS>
+keystoreLocation: keystore.jks
+keystorePassword: <NEED_THIS>
+workloads:
+  - workloadName: ecs
+    workloadThreads: 1
+    workloadSleep: 250
+    indexName: ecs-sample-data
+    fields:
+      - name: file.device
+        type: random_string_from_list
+        custom_list: server,desktop_pc,laptop_pc,router,switch,storage
+
+      - name: file.extension
+        type: random_string_from_list
+        custom_list: .ext,.dat,.zip,.gz,.tar,.out,.java,.c,.html
+
+      - name: file.gid
+        type: int
+        range: 1001,9999
+
+      - name: file.group
+        type: group
+
+      - name: file.inode
+        type: long
+        range: 10000,9999999
+
+      - name: file.mode
+        type: random_string_from_list
+        custom_list: 777,600,755,400,000,010,416,770,775,001
+
+      - name: file.mtime
+        type: date
+
+      - name: file.owner
+        type: empty
+
+      - name: file.path
+        type: path
+
+      - name: file.target_path
+        type: path
+
+      - name: file.type
+        type: random_string_from_list
+        custom_list: .ext,.dat,.zip,.gz,.tar,.out,.java,.c,.html
+
+      - name: file.uid
+        type: int
+        range: 1000,65000

@@ -1,0 +1,104 @@
+elasticsearchScheme: https
+elasticsearchHost: <NEED_THIS>
+elasticsearchPort: <NEED_THIS>
+elasticsearchUser: elastic
+elasticsearchPassword: <NEED_THIS>
+keystoreLocation: keystore.jks
+keystorePassword: <NEED_THIS>
+workloads:
+  - workloadName: ecs
+    workloadThreads: 1
+    workloadSleep: 250
+    indexName: ecs-sample-data
+    fields:
+       - name: host.architecture
+         type: random_string_from_list
+         custom_list: x86_64,ppc64,amd64,atom,risc
+
+      - name: host.geo.city_name
+        type: city
+
+      - name: host.geo.continent_name
+        type: random_string_from_list
+        custom_list: North America, South America, Europe, Africa, Asia, Antarctica
+
+       - name: host.geo.country_iso_code
+         type: country_code
+
+       - name: host.geo.country_name
+         type: country
+
+       - name: host.geo.location
+         type: geo_point
+
+       - name: host.geo.name
+         type: random_string_from_list
+         custom_list: us-east-1a, us-east-1b, us-east-1c, frankfurt-1a, frankfurt-1b, frankfurt-1c
+
+       - name: host.geo.region_iso_code
+         type: country_code
+
+       - name: host.geo.region_name
+         type: country
+
+       - name: host.hostname
+         type: hostname
+
+       - name: host.id
+         type: hash
+
+       - name: host.ip
+         type: ipv4
+
+       - name: host.mac
+         type: mac_address
+
+       - name: host.name
+         type: hostname
+
+       - name: host.os.family
+         type: random_string_from_list
+         custom_list: debian,darwin,bsd,systemV
+
+       - name: host.os.full
+         type: random_string_from_list
+         custom_list: Ubuntu 18.04, Mac OS Leopard, Solaris 11, AIX
+
+       - name: host.os.kernel
+         type: empty
+
+       - name: host.os.name
+         type: empty
+
+       - name: host.os.platform
+         type: empty
+
+       - name: host.os.version
+         type: empty
+
+       - name: host.os.type
+         type: empty
+
+       - name: host.user.email
+         type: email
+
+       - name: host.user.full_name
+         type: full_name
+
+       - name: host.user.group.id
+         type: int
+         range: 1025,1031
+
+       - name: host.user.group.name
+         type: random_string_from_list
+         custom_list: admin, user, security, hacker, executive, scientist
+
+       - name: host.user.hash
+         type: hash
+
+       - name: host.user.id
+         type: int
+         range: 2048,10248
+
+       - name: host.user.name
+         type: first_name

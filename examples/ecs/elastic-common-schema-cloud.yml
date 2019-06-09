@@ -1,0 +1,35 @@
+elasticsearchScheme: https
+elasticsearchHost: <NEED_THIS>
+elasticsearchPort: <NEED_THIS>
+elasticsearchUser: elastic
+elasticsearchPassword: <NEED_THIS>
+keystoreLocation: keystore.jks
+keystorePassword: <NEED_THIS>
+workloads:
+  - workloadName: ecs
+    workloadThreads: 1
+    workloadSleep: 250
+    indexName: ecs-sample-data
+    fields:
+      - name: cloud.account.id
+        type: long
+        range: 0,5000000
+
+      - name: cloud.availability_zone
+        type: random_string_from_list
+        custom_list: us-east-1a, us-east-1b, us-east-1c
+
+      - name: cloud.instance.name
+        type: first_name
+
+      - name: cloud.machine.type
+        type: random_string_from_list
+        custom_list: m4, d5, i2, i3, t1, t2
+
+      - name: cloud.provider
+        type: random_string_from_list
+        custom_list: aws, gcp, azure, digital_ocean, openshift
+
+      - name: cloud.region
+        type: random_string_from_list
+        custom_list: us-east, us-west

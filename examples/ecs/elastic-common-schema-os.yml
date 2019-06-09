@@ -1,0 +1,19 @@
+       - name: os.family
+         type: random_string_from_list
+         custom_list: debian,darwin,bsd,systemV
+
+       - name: os.full
+         type: random_string_from_list
+         custom_list: Ubuntu 18.04, Mac OS Leopard, Solaris 11, AIX
+
+       - name: os.kernel
+         type: empty
+
+       - name: os.name
+         type: empty
+
+       - name: os.platform
+         type: empty
+
+       - name: os.version
+         type: empty

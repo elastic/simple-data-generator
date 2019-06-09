@@ -1,0 +1,69 @@
+elasticsearchScheme: https
+elasticsearchHost: <NEED_THIS>
+elasticsearchPort: <NEED_THIS>
+elasticsearchUser: elastic
+elasticsearchPassword: <NEED_THIS>
+keystoreLocation: keystore.jks
+keystorePassword: <NEED_THIS>
+workloads:
+  - workloadName: ecs
+    workloadThreads: 1
+    workloadSleep: 250
+    indexName: ecs-sample-data
+    fields:
+      - name: event.action
+        type: constant_string
+        value: login-event
+
+      - name: event.category
+        type: random_string_from_list
+        custom_list: user-management,system-overload,shutdown,reboot
+
+      - name: event.created
+        type: date
+
+      - name: event.dataset
+        type: random_string_from_list
+        custom_list: stats,logs,metrics,traces
+
+      - name: event.duration
+        type: long
+        range: 1, 100000
+
+      - name: event.end
+        type: date
+
+      - name: event.hash
+        type: hash
+
+      - name: event.id
+        type: uuid
+
+      - name: event.module
+        type: random_string_from_list
+        custom_list: ui,cache,middleware,database
+
+      - name: event.original
+        type: empty
+
+      - name: event.outcome
+        type: random_string_from_list
+        custom_list: success,fail,pending,complete,in-progress,unavailable
+
+      - name: event.risk_score
+        type: float
+        range: 1.0,100.0
+
+      - name: event.severity
+        type: long
+        range: 1,100
+
+      - name: event.start
+        type: date
+
+      - name: event.timezone
+        type: timezone
+
+      - name: event.type
+        type: random_string_from_list
+        custom_list: marketing_event,market_crash,hack,disaster,rapture,good,bad,ugly

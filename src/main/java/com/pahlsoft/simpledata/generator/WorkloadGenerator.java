@@ -29,6 +29,9 @@ public class WorkloadGenerator {
             String state = "";
 
             switch(field.get("type")){
+                case "empty":
+                    jsonMap.put(field.get("name"),"");
+                    break;
                 case "int":
                     if (field.get("range") != null) {
                         String[] range = field.get("range").split(",");
@@ -74,10 +77,11 @@ public class WorkloadGenerator {
                     jsonMap.put("state",state);
                     break;
                 case "zipcode":
-                    jsonMap.put("zipcode",faker.address().zipCodeByState(state));
+                    jsonMap.put("name",faker.address().zipCodeByState(state));
                     break;
                 case "geo_point":
                     jsonMap.put("geo_point","{\"lon:\" " + faker.address().longitude() + " }, {\"lat:\" " + faker.address().longitude() + "}");
+                    break;
                 case "phone_number":
                     jsonMap.put("phone_number",faker.phoneNumber().cellPhone());
                     break;
@@ -90,8 +94,22 @@ public class WorkloadGenerator {
                 case "product_name":
                     jsonMap.put(field.get("name"),faker.commerce().productName());
                     break;
+                case "group":
+                    jsonMap.put(field.get("name"),faker.commerce().department());
+                    break;
                 case "uuid":
                     jsonMap.put(field.get("name"),UUID.randomUUID().toString());
+                    break;
+                case "path":
+                    jsonMap.put(field.get("name"),faker.file().fileName());
+                    break;
+                case "hostname":
+                    jsonMap.put(field.get("name"),faker.ancient().god());
+                    break;
+                case "appname":
+                    jsonMap.put(field.get("name"),faker.app().name());
+                case "url":
+                    jsonMap.put(field.get("name"),faker.internet().url());
                     break;
                 case "random_string_from_list":
                     if (field.get("custom_list") != null) {
@@ -132,11 +150,41 @@ public class WorkloadGenerator {
                 case "ipv4":
                     jsonMap.put(field.get("name"),faker.internet().ipV4Address());
                     break;
+                case "mac_address":
+                    jsonMap.put(field.get("name"),faker.internet().macAddress());
+                    break;
+                case "email":
+                    jsonMap.put(field.get("name"),faker.internet().emailAddress());
+                    break;
+                case "domain":
+                    jsonMap.put(field.get("name"),faker.internet().domainName());
+                    break;
+                case "hash":
+                    jsonMap.put(field.get("name"),faker.crypto().sha512());
+                    break;
                 case "random_cn_fact":
                     jsonMap.put(field.get("name"),faker.chuckNorris().fact());
                     break;
+                case "random_got_character":
+                    jsonMap.put(field.get("name"),faker.gameOfThrones().character());
+                    break;
                 case "random_occupation":
                     jsonMap.put(field.get("name"),faker.job().title());
+                    break;
+                case "iban":
+                    jsonMap.put(field.get("name"),faker.finance().iban());
+                    break;
+                case "team_name":
+                    jsonMap.put(field.get("name"),faker.team().name());
+                    break;
+                case "constant_string" :
+                    jsonMap.put(field.get("name"),field.get("value"));
+                    break;
+                case "date":
+                    jsonMap.put(field.get("name"),new Date());
+                    break;
+                case "timezone":
+                    jsonMap.put(field.get("name"),faker.address().timeZone());
                     break;
                 default:
                     jsonMap.put("unmapped type","unmapped type");
