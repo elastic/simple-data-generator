@@ -35,6 +35,12 @@ workloads:
         type: first_name
       - name: name.last
         type: last_name
+      - name: department
+        type: group
+      - name: team
+        type: team_name
+        
+        
    ...
 ```
 ### Addresses
@@ -71,6 +77,8 @@ workloads:
         type: uuid
       - name: product_name
         type: product_name
+      - name: random_hash
+        type: hash
    ...
 ```
 ### Random From lists
@@ -100,6 +108,36 @@ workloads:
         type: ipv4
       - name: chuck_norris_fact
         type: random_cn_fact
+      - name: character
+        type: random_got_character  
       - name: job
         type: random_occupation
+      - name: blank_field
+        type: empty  
+      - name: target_file_name
+        type: path
+      - name: servername
+        type: hostname  (List based on ancient gods)
+      - name: application_name
+        type: appname
+      - name: random_url
+        type: url
+      - name: mac
+        type: mac_address
+      - name: email_address
+        type: email
+      - name: domain_name
+        type: domain
+      - name: transaction_date
+        type: date
+      - name: tz
+        type: timezone
+```
+### Constants
+```
+workloads:
+....
+ fields:
+      - name: constant_string
+        value: something that shouldn't change
 ```
