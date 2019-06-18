@@ -1,6 +1,6 @@
 # Supported Fields
 
-### int, float (chosen randomly)
+### int, float, boolean (chosen randomly)
 ```
 workloads:
     ....
@@ -9,6 +9,8 @@ workloads:
         type: int          # Types are not
       - name: some_float
         type: float
+      - name: pass_or_fail
+        type: boolean
    ...
 ```
 ### int, float (with a given range)

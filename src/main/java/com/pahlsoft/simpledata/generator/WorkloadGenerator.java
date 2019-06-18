@@ -48,6 +48,9 @@ public class WorkloadGenerator {
                         jsonMap.put(field.get("name"),faker.number().randomDouble(2,0,65336));
                     }
                     break;
+                case "boolean":
+                    jsonMap.put(field.get("name"),faker.bool());
+                    break;
                 case "full_name":
                     jsonMap.put(field.get("name"),faker.name().fullName());
                      break;
