@@ -49,7 +49,7 @@ public class WorkloadGenerator {
                     }
                     break;
                 case "boolean":
-                    jsonMap.put(field.get("name"),faker.bool());
+                    jsonMap.put(field.get("name"),faker.bool().bool());
                     break;
                 case "full_name":
                     jsonMap.put(field.get("name"),faker.name().fullName());
