@@ -95,7 +95,7 @@ OR
 complete the <NEED_THIS> tagged fields in the runme.bash script
 ```
 
-## Step 4.5 Running with APM
+## Step 4.5 Running with Elastic Application Performance Monitoring (APM)
 ```
 complete the <NEED_THIS> fields in the runme_apm.bash script
 Simply, you need the URL for your APM server and the token provided by APM.
