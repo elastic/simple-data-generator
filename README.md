@@ -1,11 +1,11 @@
 # Simple Data Generator for Elasticsearch Indices
-The purpose of this project is to drive some sample ingest into Elasticsearch. If you have a model in mind, but aren't ready to build out piplines with Logstash or setup Beats, or write code to ingest in Elasticsearch, this code is for you.
+The purpose of this project is to ingest some sample data into Elasticsearch. If you have a model in mind, but aren't ready to build out piplines with Logstash or Beats, or write code to insert data into Elasticsearch, this project might help you.
 
 It's multi-threaded so you can generate (depending on system resources) a fair amount of load.
-It's a refactor of sample-data-generator which required development for each workload type.
-This version is completely YAML driven.
+It's a refactor of ajpahl1008/sample-data-generator which required development for each new workload type.
+This version is completely YAML driven. No more coding Yay!!!
 
-Note: This code should not be used as a benchmarking tool for your Elasticsearch instances. You should use a tool like Rally (https://github.com/elastic/rally).  This tool, is for just loading a **bunch** of stuff (closer to what YOU are going to put in Production) so you can become familiar with the query DSL, or Kibana or Maps or Aggregations. **OR!!!** Just demonstrate how effective your data analysis will be streaming to the Elastic stack.
+Note: This code should not be used as a benchmarking tool for your Elasticsearch instances. You should use a tool like Elastic's Rally (https://github.com/elastic/rally).  This tool, is for just loading a **bunch** of random data (closer to what YOU are going to put in Production) so you can become familiar with the query DSL, or Kibana or Maps or Aggregations. **OR!!!** just demonstrate how effective your data analysis will be streaming to the Elastic stack.
 
 ## Requirements
 * Java OpenJDK
