@@ -9,3 +9,4 @@ build/*
 *.log
 *.iml
 .DS_Store
+releases/*
