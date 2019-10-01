@@ -26,15 +26,10 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-<<<<<<< HEAD
     compile 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.3.2',
             'org.slf4j:slf4j-api:1.7.25', 'ch.qos.logback:logback-classic:1.2.3', 'ch.qos.logback:logback-core:1.2.3',
             'com.github.javafaker:javafaker:0.14', 'co.elastic.apm:apm-agent-api:1.10.0'
-=======
-    compile 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.3.0',
-            'org.slf4j:slf4j-api:1.7.25', 'ch.qos.logback:logback-classic:1.2.3', 'ch.qos.logback:logback-core:1.2.3',
-            'com.github.javafaker:javafaker:0.14', 'co.elastic.apm:apm-agent-api:1.7.0'
->>>>>>> e7cd0551b875dd9f330533f31d751751cba88434
+
 
 }
 
