@@ -1,12 +1,12 @@
 plugins {
     id 'java'
-    id "org.sonarqube" version "2.6"
+    id 'org.sonarqube' version '2.6'
+    id 'net.researchgate.release' version '2.6.0'
 }
 
 group 'com.pahlsoft.examples.simpledata'
-version '1.0-SNAPSHOT'
 
-sourceCompatibility = 11kk
+sourceCompatibility = 11
 
 //create a single Jar with all dependencies
 task fatJar(type: Jar) {
@@ -15,7 +15,7 @@ task fatJar(type: Jar) {
                 'Implementation-Version': 1.0,
                 'Main-Class': 'com.pahlsoft.simpledata.runner.EngineRunner'
     }
-    baseName = project.name + '-all'
+    baseName = project.name
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
@@ -26,9 +26,15 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+<<<<<<< HEAD
     compile 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.3.2',
             'org.slf4j:slf4j-api:1.7.25', 'ch.qos.logback:logback-classic:1.2.3', 'ch.qos.logback:logback-core:1.2.3',
             'com.github.javafaker:javafaker:0.14', 'co.elastic.apm:apm-agent-api:1.10.0'
+=======
+    compile 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.3.0',
+            'org.slf4j:slf4j-api:1.7.25', 'ch.qos.logback:logback-classic:1.2.3', 'ch.qos.logback:logback-core:1.2.3',
+            'com.github.javafaker:javafaker:0.14', 'co.elastic.apm:apm-agent-api:1.7.0'
+>>>>>>> e7cd0551b875dd9f330533f31d751751cba88434
 
 }
 
