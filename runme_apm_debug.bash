@@ -1,4 +1,4 @@
-java -javaagent:./apm_lib/elastic-apm-agent-1.10.0.jar \
+java -javaagent:./apm_lib/elastic-apm-agent-1.13.0.jar \
 -Delastic.apm.service_name=simple-data-generator \
 -Delastic.apm.server_urls=<NEED_THIS> \
 -Delastic.apm.secret_token=<NEED_THIS> \
