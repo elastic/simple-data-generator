@@ -7,12 +7,14 @@ import com.pahlsoft.simpledata.model.Configuration;
 import com.pahlsoft.simpledata.model.Workload;
 import com.pahlsoft.simpledata.generator.WorkloadGenerator;
 import com.pahlsoft.simpledata.interfaces.Engine;
+import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.SSLContexts;
 import org.elasticsearch.action.index.IndexRequest;
@@ -25,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.KeyManagementException;
@@ -32,6 +35,10 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
 
 public class WorkloadGeneratorEngine implements Engine {
 
@@ -66,8 +73,11 @@ public class WorkloadGeneratorEngine implements Engine {
             if (this.config_map.getElasticsearchScheme().contentEquals("https")) {
                 sslBuilder = buildSSLContext();
                 final SSLContext sslContext = sslBuilder.build();
-                client = getSecureClient(credentialsProvider, sslContext);
-
+                if (this.config_map.getElasticsearchApiKeyEnabled()){
+                    client = getSecureApiClient(sslContext);
+                } else {
+                    client = getSecureClient(credentialsProvider, sslContext);
+                }
             } else {
                 client = getClient(credentialsProvider);
             }
@@ -102,7 +112,6 @@ public class WorkloadGeneratorEngine implements Engine {
                     transaction.setResult("failed");
                     transaction.captureException(ioe);
                 } finally {
-
                     transaction.end();
                 }
             }
@@ -153,6 +162,21 @@ public class WorkloadGeneratorEngine implements Engine {
                             @Override
                             public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
                                 return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider).setSSLContext(sslContext);
+                            }
+                        }));
+    }
+
+    private RestHighLevelClient getSecureApiClient(SSLContext sslContext) {
+        String apiKeyAuth = Base64.getEncoder().encodeToString((this.config_map.getElasticsearchApiKeyId() + ":" + this.config_map.getElasticsearchApiKeySecret()).getBytes(StandardCharsets.UTF_8));
+        Collection<Header> defaultHeaders = Collections.singleton((new BasicHeader("Authorization", "ApiKey " + apiKeyAuth)));
+
+        return new RestHighLevelClient(
+                RestClient.builder(
+                        new HttpHost(this.config_map.getElasticsearchHost(), this.config_map.getElasticsearchPort(), this.config_map.getElasticsearchScheme()))
+                        .setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
+                            @Override
+                            public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
+                                return httpClientBuilder.setSSLContext(sslContext).setDefaultHeaders(defaultHeaders);
                             }
                         }));
     }

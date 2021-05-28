@@ -8,6 +8,9 @@ public class Configuration {
     private int elasticsearchPort;
     private String elasticsearchUser;
     private String elasticsearchPassword;
+    private Boolean elasticsearchApiKeyEnabled;
+    private String elasticsearchApiKeyId;
+    private String elasticsearchApiKeySecret;
     private String keystoreLocation;
     private String keystorePassword;
     private List<Workload> workloads;
@@ -75,5 +78,29 @@ public class Configuration {
 
     public void setWorkloads(List<Workload> workloads) {
         this.workloads = workloads;
+    }
+
+    public String getElasticsearchApiKeySecret() {
+        return elasticsearchApiKeySecret;
+    }
+
+    public void setElasticsearchApiKeySecret(String elasticsearchApiKeySecret) {
+        this.elasticsearchApiKeySecret = elasticsearchApiKeySecret;
+    }
+
+    public String getElasticsearchApiKeyId() {
+        return elasticsearchApiKeyId;
+    }
+
+    public void setElasticsearchApiKeyId(String elasticsearchApiKeyId) {
+        this.elasticsearchApiKeyId = elasticsearchApiKeyId;
+    }
+
+    public Boolean getElasticsearchApiKeyEnabled() {
+        return elasticsearchApiKeyEnabled;
+    }
+
+    public void setElasticsearchApiKeyEnabled(Boolean elasticsearchApiKeyEnabled) {
+        this.elasticsearchApiKeyEnabled = elasticsearchApiKeyEnabled;
     }
 }

@@ -30,7 +30,8 @@ public class EngineRunner {
                 workload = (Workload) iterator.next();
                 WorkloadGeneratorEngineThreader.runEngine(workload.getWorkloadThreads(), new WorkloadGeneratorEngine(configuration,workload));
             }
-
+            System.out.println("ApiKeyID: " + configuration.getElasticsearchApiKeyId());
+            System.out.println("ApiKeySecret: " + configuration.getElasticsearchApiKeySecret() );
             System.out.println("Workloads Started.");
 
         } catch (Exception e) {

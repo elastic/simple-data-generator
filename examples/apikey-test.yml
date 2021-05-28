@@ -1,0 +1,35 @@
+elasticsearchScheme: https
+elasticsearchHost: <REQUIRED>
+elasticsearchPort: 9243
+elasticsearchUser: elastic
+elasticsearchPassword: <REQUIRED>
+elasticsearchApiKeyEnabled: false
+elasticsearchApiKeyId: <OPTIONAL>
+elasticsearchApiKeySecret: <OPTIONAL>
+keystoreLocation: keystore.jks
+keystorePassword: <REQUIRED>
+workloads:
+  - workloadName: application_a
+    workloadThreads: 1
+    workloadSleep: 250
+    indexName: sdg-a
+    fields:
+      - name: temperature
+        type: int
+        range: 0,120
+      - name: name
+        type: full_name
+      - name: location
+        type: state
+
+  - workloadName: application_b
+    workloadThreads: 1
+    workloadSleep: 1000
+    indexName: application-b
+    fields:
+      - name: credit_card
+        type: credit_card_number
+      - name: social_security_number
+        type: ssn
+      - name: token
+        type: uuid
