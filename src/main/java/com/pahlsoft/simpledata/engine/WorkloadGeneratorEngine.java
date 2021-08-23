@@ -94,6 +94,7 @@ public class WorkloadGeneratorEngine implements Engine {
                     span.activate();
 
                         try {
+                            //indexRequest = new IndexRequest(workload.getIndexName(), "_doc").source(WorkloadGenerator.buildDocument(workload));
                             indexRequest = new IndexRequest(workload.getIndexName(), "_doc").source(WorkloadGenerator.buildDocument(workload));
                             client.index(indexRequest, RequestOptions.DEFAULT);
                             log.debug("|"+ workload.getWorkloadName() + "|");
