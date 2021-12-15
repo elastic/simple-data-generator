@@ -42,7 +42,7 @@ dependencies {
     testCompileOnly group: 'junit', name: 'junit', version: '4.12'
     implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.13.2',
             'org.slf4j:slf4j-api:1.7.25', 'ch.qos.logback:logback-classic:1.2.3', 'ch.qos.logback:logback-core:1.2.3',
-            'com.github.javafaker:javafaker:0.14', 'co.elastic.apm:apm-agent-api:1.24.0', 'org.apache.logging.log4j:log4j-core:2.14.0'
+            'com.github.javafaker:javafaker:1.0.2', 'co.elastic.apm:apm-agent-api:1.24.0', 'org.apache.logging.log4j:log4j-core:2.14.0'
 }
 
 clean {
