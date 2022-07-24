@@ -25,3 +25,6 @@ keytool -genkey -alias elastic_servers \
 
 keytool -import -noprompt -trustcacerts -alias pahl_cloud -file es_cloud.cert \
     -keystore ./keystore.jks -storepass ${PASSWORD}
+
+echo -n "Overwriting existing JKS in scripts directory"
+cp keystore.jks scripts/.
