@@ -3,10 +3,18 @@ package com.pahlsoft.simpledata.engine;
 import co.elastic.apm.api.ElasticApm;
 import co.elastic.apm.api.Span;
 import co.elastic.apm.api.Transaction;
-import com.pahlsoft.simpledata.model.Configuration;
-import com.pahlsoft.simpledata.model.Workload;
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch.core.IndexRequest;
+import co.elastic.clients.elasticsearch.core.IndexResponse;
+import co.elastic.clients.json.JsonData;
+import co.elastic.clients.json.jackson.JacksonJsonpMapper;
+import co.elastic.clients.transport.ElasticsearchTransport;
+import co.elastic.clients.transport.rest_client.RestClientTransport;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pahlsoft.simpledata.generator.WorkloadGenerator;
 import com.pahlsoft.simpledata.interfaces.Engine;
+import com.pahlsoft.simpledata.model.Configuration;
+import com.pahlsoft.simpledata.model.Workload;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -17,16 +25,15 @@ import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.SSLContexts;
-import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
-import org.elasticsearch.client.RestHighLevelClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -35,7 +42,6 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
@@ -49,6 +55,10 @@ public class WorkloadGeneratorEngine implements Engine {
 
     KeyStore truststore = null;
     SSLContextBuilder sslBuilder = null;
+
+    RestClient restClient = null;
+    ElasticsearchTransport transport = null;
+    ElasticsearchClient esClient = null;
 
     public WorkloadGeneratorEngine(final Configuration config_map, final Workload workload) {
         this.config_map = config_map;
@@ -66,20 +76,17 @@ public class WorkloadGeneratorEngine implements Engine {
         credentialsProvider.setCredentials(AuthScope.ANY,
                 new UsernamePasswordCredentials(this.config_map.getElasticsearchUser(),this.config_map.getElasticsearchPassword()));
 
-        RestHighLevelClient client;
-        IndexRequest indexRequest;
-
         try {
             if (this.config_map.getElasticsearchScheme().contentEquals("https")) {
                 sslBuilder = buildSSLContext();
                 final SSLContext sslContext = sslBuilder.build();
                 if (this.config_map.getElasticsearchApiKeyEnabled()){
-                    client = getSecureApiClient(sslContext);
+                    restClient = getSecureApiClient(sslContext).build();
                 } else {
-                    client = getSecureClient(credentialsProvider, sslContext);
+                    restClient = getSecureClient(credentialsProvider, sslContext).build();
                 }
             } else {
-                client = getClient(credentialsProvider);
+                restClient = getClient(credentialsProvider).build();
             }
 
             boolean engineRun = true;
@@ -93,10 +100,25 @@ public class WorkloadGeneratorEngine implements Engine {
                     setSpanInfo(span, "indexRequest: ", workload.getIndexName());
                     span.activate();
 
-                        try {
-                            //indexRequest = new IndexRequest(workload.getIndexName(), "_doc").source(WorkloadGenerator.buildDocument(workload));
-                            indexRequest = new IndexRequest(workload.getIndexName(), "_doc").source(WorkloadGenerator.buildDocument(workload));
-                            client.index(indexRequest, RequestOptions.DEFAULT);
+                    // Create the transport with a Jackson mapper
+                    transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
+                    // And create the API client
+                    esClient = new ElasticsearchClient(transport);
+
+                    ObjectMapper objectMapper = new ObjectMapper();
+
+                    try {
+                        String json = objectMapper.writeValueAsString(WorkloadGenerator.buildDocument(workload));
+                            Reader input = new StringReader(json);
+                            IndexRequest<JsonData> request = IndexRequest.of(i -> i
+                                    .index(workload.getIndexName())
+                                    .withJson(input)
+                            );
+                            IndexResponse response = esClient.index(request);
+
+                            log.info("Indexed with version " + response.version());
+
+                            //TODO: Fix Index statement
                             log.debug("|"+ workload.getWorkloadName() + "|");
                             Thread.sleep(workload.getWorkloadSleep());
                         } catch (Exception e) {
@@ -128,10 +150,10 @@ public class WorkloadGeneratorEngine implements Engine {
     private void setTransactionInfo(Transaction transaction) {
         transaction.setName(workload.getWorkloadName()+"Transaction");
         transaction.setType(Transaction.TYPE_REQUEST);
-        transaction.addLabel("workload",workload.getWorkloadName());
-        transaction.addLabel("thread_id",Thread.currentThread().getId());
-        transaction.addLabel("sleep_time",workload.getWorkloadSleep());
-        transaction.addLabel("total_threads", workload.getWorkloadThreads());
+        transaction.setLabel("workload",workload.getWorkloadName());
+        transaction.setLabel("thread_id",Thread.currentThread().getId());
+        transaction.setLabel("sleep_time",workload.getWorkloadSleep());
+        transaction.setLabel("total_threads", workload.getWorkloadThreads());
     }
 
     private SSLContextBuilder buildSSLContext() {
@@ -155,43 +177,42 @@ public class WorkloadGeneratorEngine implements Engine {
         return sslBuilder;
     }
 
-    private RestHighLevelClient getSecureClient(CredentialsProvider credentialsProvider, SSLContext sslContext) {
-        return new RestHighLevelClient(
-                RestClient.builder(
+    private RestClientBuilder getSecureClient(CredentialsProvider credentialsProvider, SSLContext sslContext) {
+          return RestClient.builder(
                         new HttpHost(this.config_map.getElasticsearchHost(), this.config_map.getElasticsearchPort(), this.config_map.getElasticsearchScheme()))
                         .setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
                             @Override
                             public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
                                 return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider).setSSLContext(sslContext);
                             }
-                        }));
+                        });
     }
 
-    private RestHighLevelClient getSecureApiClient(SSLContext sslContext) {
+    private RestClientBuilder getSecureApiClient(SSLContext sslContext) {
         String apiKeyAuth = Base64.getEncoder().encodeToString((this.config_map.getElasticsearchApiKeyId() + ":" + this.config_map.getElasticsearchApiKeySecret()).getBytes(StandardCharsets.UTF_8));
         Collection<Header> defaultHeaders = Collections.singleton((new BasicHeader("Authorization", "ApiKey " + apiKeyAuth)));
 
-        return new RestHighLevelClient(
-                RestClient.builder(
+        //return new RestHighLevelClient(
+          return      RestClient.builder(
                         new HttpHost(this.config_map.getElasticsearchHost(), this.config_map.getElasticsearchPort(), this.config_map.getElasticsearchScheme()))
                         .setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
                             @Override
                             public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
                                 return httpClientBuilder.setSSLContext(sslContext).setDefaultHeaders(defaultHeaders);
                             }
-                        }));
+                        });
     }
 
-    private RestHighLevelClient getClient(CredentialsProvider credentialsProvider) {
-        return new RestHighLevelClient(
-                RestClient.builder(
+    private RestClientBuilder getClient(CredentialsProvider credentialsProvider) {
+        //return new RestHighLevelClient(
+          return      RestClient.builder(
                         new HttpHost(this.config_map.getElasticsearchHost(),this.config_map.getElasticsearchPort(), this.config_map.getElasticsearchScheme()))
                         .setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
                             @Override
                             public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
                                 return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
                             }
-                        }));
+                        });
 
     }
 }

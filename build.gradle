@@ -1,18 +1,16 @@
 plugins {
     id 'java'
-    id 'org.sonarqube' version '2.6'
-    id 'net.researchgate.release' version '2.6.0'
 }
 group 'com.pahlsoft.examples.simpledata'
 
-sourceCompatibility = 16
+sourceCompatibility = 18
 
 //create a single Jar with all dependencies
 tasks.register('fatJar', Jar) {
 
     duplicatesStrategy = 'include'
     archiveClassifier = 'fatJar'
-    baseName = project.name
+    archiveBaseName = project.name
     manifest {
         attributes 'Implementation-Title': 'Simple Load Generator',
                 'Implementation-Version': 1.0,
@@ -29,9 +27,6 @@ tasks.register('fatJar', Jar) {
 
 repositories {
     mavenCentral()
-//    flatDir {
-//        dirs '/Users/aj/MQJARS/wmq/JavaSE'
-//    }
 }
 
 repositories {
@@ -40,9 +35,10 @@ repositories {
 
 dependencies {
     testCompileOnly group: 'junit', name: 'junit', version: '4.12'
-    implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.13.2',
-            'org.slf4j:slf4j-api:1.7.25', 'ch.qos.logback:logback-classic:1.2.3', 'ch.qos.logback:logback-core:1.2.3',
-            'com.github.javafaker:javafaker:1.0.2', 'co.elastic.apm:apm-agent-api:1.24.0', 'org.apache.logging.log4j:log4j-core:2.15.0'
+            implementation 'co.elastic.clients:elasticsearch-java:8.3.2',
+    'com.fasterxml.jackson.core:jackson-databind:2.12.3',
+            'org.slf4j:slf4j-api:1.7.36', 'ch.qos.logback:logback-classic:1.2.11', 'ch.qos.logback:logback-core:1.2.11',
+            'com.github.javafaker:javafaker:1.0.2', 'co.elastic.apm:apm-agent-api:1.33.0', 'org.apache.logging.log4j:log4j-core:2.17.2'
 }
 
 clean {

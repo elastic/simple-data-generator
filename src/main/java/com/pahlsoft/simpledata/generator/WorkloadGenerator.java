@@ -1,6 +1,8 @@
 package com.pahlsoft.simpledata.generator;
 
 import co.elastic.apm.api.CaptureSpan;
+import co.elastic.clients.json.JsonData;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.github.javafaker.Faker;
 
 import java.util.*;
@@ -10,12 +12,13 @@ import com.pahlsoft.simpledata.model.Workload;
 public class WorkloadGenerator {
 
     WorkloadGenerator() {
-        throw new IllegalStateException("Utility class");
+        throw new IllegalStateException("WorkloadGenerator class");
     }
 
     @CaptureSpan
     public static Map buildDocument(Workload workload) {
         Faker faker = new Faker(new Locale("en-US"));
+
         Map<String, Object> jsonMap = new HashMap<>();
 
         jsonMap.put("@timestamp", new Date());

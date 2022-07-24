@@ -22,7 +22,7 @@ public class EngineRunner {
     public static void main(String[] args) {
        validateArguments(args);
         loadConfig(args[0]);
-        Workload workload = null;
+        Workload workload;
         Iterator iterator = configuration.getWorkloads().iterator();
         try {
 
