@@ -116,10 +116,10 @@ public class WorkloadGeneratorEngine implements Engine {
                             );
                             IndexResponse response = esClient.index(request);
 
-                            log.info("Indexed with version " + response.version());
+                            log.debug("Document" + response.id() + "Indexed with version " + response.version());
 
                             //TODO: Fix Index statement
-                            log.debug("|"+ workload.getWorkloadName() + "|");
+                            log.debug("| Workload: "+ workload.getWorkloadName() + "|");
                             Thread.sleep(workload.getWorkloadSleep());
                         } catch (Exception e) {
                             span.captureException(e);

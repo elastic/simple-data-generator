@@ -12,6 +12,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.sql.SQLOutput;
 import java.util.Iterator;
 
 public class EngineRunner {
@@ -23,21 +24,35 @@ public class EngineRunner {
        validateArguments(args);
         loadConfig(args[0]);
         Workload workload;
-        Iterator iterator = configuration.getWorkloads().iterator();
         try {
+            Iterator iterator = configuration.getWorkloads().iterator();
 
             while (iterator.hasNext()) {
                 workload = (Workload) iterator.next();
                 WorkloadGeneratorEngineThreader.runEngine(workload.getWorkloadThreads(), new WorkloadGeneratorEngine(configuration,workload));
             }
-            System.out.println("ApiKeyID: " + configuration.getElasticsearchApiKeyId());
-            System.out.println("ApiKeySecret: " + configuration.getElasticsearchApiKeySecret() );
+            if (log.isDebugEnabled()) {
+                debugConfiguration();
+            }
+            log.info("Workloads Started");
             System.out.println("Workloads Started.");
 
         } catch (Exception e) {
+            System.out.println("Initialization Error: " + e.getMessage());
+            System.out.println("Initialization Error: access to yml is restricted or incorrectly configured");
             log.error(e.getMessage());
         }
 
+    }
+
+    private static void debugConfiguration() {
+        log.debug("Elasticsearch Endpoint: " + configuration.getElasticsearchHost() );
+        log.debug("Elasticsearch Endpoint HTTP Scheme: " + configuration.getElasticsearchScheme() );
+        log.debug("Elasticsearch Port: " + configuration.getElasticsearchPort() );
+        log.debug("ApiKeyID: " + configuration.getElasticsearchApiKeyId());
+        log.debug("ApiKeySecret: " + configuration.getElasticsearchApiKeySecret() );
+        log.debug("Elasticsearch User: " + configuration.getElasticsearchUser() );
+        log.debug("Elasticsearch Password: " + configuration.getElasticsearchPassword() );
     }
 
     private static void loadConfig(String args) {
@@ -48,13 +63,11 @@ public class EngineRunner {
                 InputStream inputStream = new FileInputStream(new File(args));
                 configuration = yaml.load(inputStream);
             } catch (Exception e) {
-                if (log.isDebugEnabled()) {
-                    log.error(e.getMessage());
-                }
+                log.error(e.getMessage());
             }
         } catch ( Exception e) {
-            log.error("Unable to load model");
-            System.out.println("Unable to Load YML model file");
+            System.out.println("Initialization Error: Unable to Load YML model file");
+            log.error("Initialization Error: Unable to Load YML model file");
             System.exit(1);
         }
         log.info("Configuration Loaded");
