@@ -1,8 +1,6 @@
 package com.pahlsoft.simpledata.generator;
 
 import co.elastic.apm.api.CaptureSpan;
-import co.elastic.clients.json.JsonData;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.github.javafaker.Faker;
 
 import java.util.*;
@@ -112,6 +110,7 @@ public class WorkloadGenerator {
                     break;
                 case "appname":
                     jsonMap.put(field.get("name"),faker.app().name());
+                    break;
                 case "url":
                     jsonMap.put(field.get("name"),faker.internet().url());
                     break;
