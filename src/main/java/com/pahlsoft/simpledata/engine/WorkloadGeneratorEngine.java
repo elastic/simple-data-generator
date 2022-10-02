@@ -112,7 +112,6 @@ public class WorkloadGeneratorEngine implements Engine {
                                 BulkRequest.Builder br = new BulkRequest.Builder();
                                 ObjectMapper objectMapper = new ObjectMapper();
                                 InputStream input;
-                                //String json;
 
                                 for (int bulkItems=0; bulkItems < config_map.getElasticsearchBulkQueueDepth(); bulkItems++) {
                                     //TODO:  need to optimize
