@@ -11,6 +11,8 @@ public class Configuration {
     private Boolean elasticsearchApiKeyEnabled;
     private String elasticsearchApiKeyId;
     private String elasticsearchApiKeySecret;
+
+    private int elasticsearchBulkQueueDepth;
     private String keystoreLocation;
     private String keystorePassword;
     private List<Workload> workloads;
@@ -102,5 +104,13 @@ public class Configuration {
 
     public void setElasticsearchApiKeyEnabled(Boolean elasticsearchApiKeyEnabled) {
         this.elasticsearchApiKeyEnabled = elasticsearchApiKeyEnabled;
+    }
+
+    public int getElasticsearchBulkQueueDepth() {
+        return elasticsearchBulkQueueDepth;
+    }
+
+    public void setElasticsearchBulkQueueDepth(int elasticsearchBulkQueueDepth) {
+        this.elasticsearchBulkQueueDepth = elasticsearchBulkQueueDepth;
     }
 }

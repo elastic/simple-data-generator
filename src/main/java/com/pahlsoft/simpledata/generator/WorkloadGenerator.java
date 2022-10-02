@@ -29,7 +29,6 @@ public class WorkloadGenerator {
 
         while (iterator.hasNext()) {
             field = (Map<String,String>) iterator.next();
-            String state = "";
 
             switch(field.get("type")){
                 case "empty":
@@ -79,11 +78,10 @@ public class WorkloadGenerator {
                     jsonMap.put(field.get("name"),faker.address().countryCode());
                     break;
                 case "state":
-                    state = faker.address().stateAbbr();
-                    jsonMap.put("state",state);
+                    jsonMap.put("state",faker.address().stateAbbr());
                     break;
                 case "zipcode":
-                    jsonMap.put("name",faker.address().zipCodeByState(state));
+                    jsonMap.put("name",faker.address().zipCode());
                     break;
                 case "geo_point":
                     jsonMap.put("geo_point","{\"lon:\" " + faker.address().longitude() + " }, {\"lat:\" " + faker.address().longitude() + "}");

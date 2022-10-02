@@ -4,9 +4,12 @@ import co.elastic.apm.api.ElasticApm;
 import co.elastic.apm.api.Span;
 import co.elastic.apm.api.Transaction;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch.core.BulkRequest;
+import co.elastic.clients.elasticsearch.core.BulkResponse;
 import co.elastic.clients.elasticsearch.core.IndexRequest;
 import co.elastic.clients.elasticsearch.core.IndexResponse;
 import co.elastic.clients.json.JsonData;
+import co.elastic.clients.json.JsonpMapper;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
@@ -15,6 +18,7 @@ import com.pahlsoft.simpledata.generator.WorkloadGenerator;
 import com.pahlsoft.simpledata.interfaces.Engine;
 import com.pahlsoft.simpledata.model.Configuration;
 import com.pahlsoft.simpledata.model.Workload;
+import jakarta.json.spi.JsonProvider;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -31,9 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -93,7 +95,7 @@ public class WorkloadGeneratorEngine implements Engine {
             while(engineRun) {
                 Transaction transaction = ElasticApm.startTransaction();
                 try {
-
+                    //APM
                     setTransactionInfo(transaction);
                     transaction.activate();
                     Span span = transaction.startSpan();
@@ -104,25 +106,49 @@ public class WorkloadGeneratorEngine implements Engine {
                     transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
                     // And create the API client
                     esClient = new ElasticsearchClient(transport);
-
-                    ObjectMapper objectMapper = new ObjectMapper();
-
                     try {
-                        String json = objectMapper.writeValueAsString(WorkloadGenerator.buildDocument(workload));
-                            Reader input = new StringReader(json);
-                            IndexRequest<JsonData> request = IndexRequest.of(i -> i
-                                    .index(workload.getIndexName())
-                                    .withJson(input)
-                            );
-                            IndexResponse response = esClient.index(request);
+                            //Bulk Docs
+                            if (config_map.getElasticsearchBulkQueueDepth() >= 1) {
+                                BulkRequest.Builder br = new BulkRequest.Builder();
+                                ObjectMapper objectMapper = new ObjectMapper();
+                                InputStream input;
+                                //String json;
 
-                            log.debug("Document" + response.id() + "Indexed with version " + response.version());
+                                for (int bulkItems=0; bulkItems < config_map.getElasticsearchBulkQueueDepth(); bulkItems++) {
+                                    //TODO:  need to optimize
+                                    input = new ByteArrayInputStream(objectMapper.writeValueAsString(WorkloadGenerator.buildDocument(workload)).getBytes());
+                                    JsonData jsonp = readJson(input, esClient);
+                                    br.operations(op -> op
+                                            .index(idx -> idx
+                                                .index(workload.getIndexName())
+                                                .document(jsonp)
+                                            )
+                                    );
+                                }
+                                BulkResponse response = esClient.bulk(br.build());
 
-                            //TODO: Fix Index statement
-                            log.debug("| Workload: "+ workload.getWorkloadName() + "|");
+                                log.debug( response.items().size() + " Documents Bulk Indexed in " + response.took() + "ms");
+
+                            // Single Doc
+                            } else {
+                                ObjectMapper objectMapper = new ObjectMapper();
+                                String json = objectMapper.writeValueAsString(WorkloadGenerator.buildDocument(workload));
+                                Reader input = new StringReader(json);
+                                IndexRequest<JsonData> request = IndexRequest.of(i -> i
+                                        .index(workload.getIndexName())
+                                        .withJson(input)
+                                );
+                                IndexResponse response = esClient.index(request);
+                                log.debug("Document" + response.id() + "Indexed with version " + response.version());
+                            }
+                            //TODO: This is where the periodicity/peak-spike logic goes
                             Thread.sleep(workload.getWorkloadSleep());
                         } catch (Exception e) {
                             span.captureException(e);
+                            log.debug("Indexing Error:" + e.getMessage());
+                            if (log.isDebugEnabled()) {
+                                e.printStackTrace();
+                            }
                         } finally {
                             span.end();
                         }
@@ -214,5 +240,12 @@ public class WorkloadGeneratorEngine implements Engine {
                             }
                         });
 
+    }
+
+    public static JsonData readJson(InputStream input, ElasticsearchClient esClient) {
+        JsonpMapper jsonpMapper = esClient._transport().jsonpMapper();
+        JsonProvider jsonProvider = jsonpMapper.jsonProvider();
+
+        return JsonData.from(jsonProvider.createParser(input), jsonpMapper);
     }
 }

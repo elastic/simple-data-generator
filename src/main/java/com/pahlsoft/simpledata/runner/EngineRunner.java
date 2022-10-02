@@ -53,6 +53,8 @@ public class EngineRunner {
         log.debug("ApiKeySecret: " + configuration.getElasticsearchApiKeySecret() );
         log.debug("Elasticsearch User: " + configuration.getElasticsearchUser() );
         log.debug("Elasticsearch Password: " + configuration.getElasticsearchPassword() );
+        log.debug("Bulk Queue Depth: " + configuration.getElasticsearchBulkQueueDepth() );
+
     }
 
     private static void loadConfig(String args) {
