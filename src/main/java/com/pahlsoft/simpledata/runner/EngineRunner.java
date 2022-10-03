@@ -23,11 +23,12 @@ public class EngineRunner {
     public static void main(String[] args) {
        validateArguments(args);
         loadConfig(args[0]);
-        Workload workload;
+
         try {
             Iterator iterator = configuration.getWorkloads().iterator();
 
             while (iterator.hasNext()) {
+                Workload workload;
                 workload = (Workload) iterator.next();
                 WorkloadGeneratorEngineThreader.runEngine(workload.getWorkloadThreads(), new WorkloadGeneratorEngine(configuration,workload));
             }
@@ -38,9 +39,8 @@ public class EngineRunner {
             System.out.println("Workloads Started.");
 
         } catch (Exception e) {
-            System.out.println("Initialization Error: " + e.getMessage());
-            System.out.println("Initialization Error: access to yml is restricted or incorrectly configured");
             log.error(e.getMessage());
+            log.error("Initialization Error: access to yml is restricted or incorrectly configured");
         }
 
     }
@@ -53,8 +53,8 @@ public class EngineRunner {
         log.debug("ApiKeySecret: " + configuration.getElasticsearchApiKeySecret() );
         log.debug("Elasticsearch User: " + configuration.getElasticsearchUser() );
         log.debug("Elasticsearch Password: " + configuration.getElasticsearchPassword() );
-        log.debug("Bulk Queue Depth: " + configuration.getElasticsearchBulkQueueDepth() );
-
+        log.debug("Elasticsearch Bulk Queue Depth: " + configuration.getElasticsearchBulkQueueDepth() );
+        log.debug("Number of Workloads " + configuration.getWorkloads().size());
     }
 
     private static void loadConfig(String args) {

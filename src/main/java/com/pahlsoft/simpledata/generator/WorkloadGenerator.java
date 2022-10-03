@@ -13,9 +13,11 @@ public class WorkloadGenerator {
         throw new IllegalStateException("WorkloadGenerator class");
     }
 
+    private static Faker faker = new Faker(new Locale("en-US"));
+
     @CaptureSpan
     public static Map buildDocument(Workload workload) {
-        Faker faker = new Faker(new Locale("en-US"));
+
 
         Map<String, Object> jsonMap = new HashMap<>();
 

@@ -51,13 +51,10 @@ import java.util.Collections;
 public class WorkloadGeneratorEngine implements Engine {
 
     static Logger log = LoggerFactory.getLogger(WorkloadGeneratorEngine.class);
-
     private static Configuration config_map;
-    private Workload workload;
-
+    private static Workload workload;
     KeyStore truststore = null;
     SSLContextBuilder sslBuilder = null;
-
     RestClient restClient = null;
     ElasticsearchTransport transport = null;
     ElasticsearchClient esClient = null;
