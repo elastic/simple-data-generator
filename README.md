@@ -31,12 +31,16 @@ Depending how you'll access Elasticsearch, you can run this a few times [changin
 There's a couple of examples in the example directory but here's the basic structure.
 ```
 elasticsearchScheme: https
-elasticsearchHost: someclusterid.cloud.elastic.co
+elasticsearchHost: <REQUIRED>
 elasticsearchPort: 9243
 elasticsearchUser: elastic
-elasticsearchPassword: somePassword
+elasticsearchPassword: <REQUIRED>
+elasticsearchApiKeyEnabled: false
+elasticsearchApiKeyId: <OPTIONAL>
+elasticsearchApiKeySecret: <OPTIONAL>
+elasticsearchBulkQueueDepth: 0
 keystoreLocation: keystore.jks
-keystorePassword: yourkeystorePassword
+keystorePassword: <REQUIRED>
 workloads:
   - workloadName: workload_1
     workloadThreads: 1
@@ -57,12 +61,16 @@ workloads:
 ### Multiple Workload Structure
 ```
 elasticsearchScheme: https
-elasticsearchHost: someclusterid.cloud.elastic.co
+elasticsearchHost: <REQUIRED>
 elasticsearchPort: 9243
 elasticsearchUser: elastic
-elasticsearchPassword: somePassword
+elasticsearchPassword: <REQUIRED>
+elasticsearchApiKeyEnabled: false
+elasticsearchApiKeyId: <OPTIONAL>
+elasticsearchApiKeySecret: <OPTIONAL>
+elasticsearchBulkQueueDepth: 0
 keystoreLocation: keystore.jks
-keystorePassword: yourkeystorePassword
+keystorePassword: <REQUIRED>
 workloads:
   - workloadName: workload_1
     workloadThreads: 1
