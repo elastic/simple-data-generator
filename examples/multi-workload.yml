@@ -1,10 +1,14 @@
-elasticsearchScheme: http
-elasticsearchHost: <NEED_THIS>
-elasticsearchPort: <NEED_THIS>
+elasticsearchScheme: https
+elasticsearchHost: <REQUIRED>
+elasticsearchPort: 9243
 elasticsearchUser: elastic
-elasticsearchPassword: 
+elasticsearchPassword: <REQUIRED>
+elasticsearchApiKeyEnabled: false
+elasticsearchApiKeyId: <OPTIONAL>
+elasticsearchApiKeySecret: <OPTIONAL>
+elasticsearchBulkQueueDepth: 0
 keystoreLocation: keystore.jks
-keystorePassword: <NEED_THIS>
+keystorePassword: <REQUIRED>
 workloads:
   - workloadName: iot
     workloadThreads: 2

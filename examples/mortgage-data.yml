@@ -1,10 +1,14 @@
 elasticsearchScheme: https
-elasticsearchHost: <NEED_THIS>
-elasticsearchPort: <NEED_THIS>
+elasticsearchHost: <REQUIRED>
+elasticsearchPort: 9243
 elasticsearchUser: elastic
-elasticsearchPassword: <NEED_THIS>
+elasticsearchPassword: <REQUIRED>
+elasticsearchApiKeyEnabled: false
+elasticsearchApiKeyId: <OPTIONAL>
+elasticsearchApiKeySecret: <OPTIONAL>
+elasticsearchBulkQueueDepth: 0
 keystoreLocation: keystore.jks
-keystorePassword: <NEED_THIS>
+keystorePassword: <REQUIRED>
 workloads:
   - workloadName: mortgage_workload
     workloadThreads: 1

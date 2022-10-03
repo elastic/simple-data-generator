@@ -105,7 +105,7 @@ public class WorkloadGeneratorEngine implements Engine {
                     esClient = new ElasticsearchClient(transport);
                     try {
                             //Bulk Docs
-                            if (config_map.getElasticsearchBulkQueueDepth() >= 1) {
+                            if (config_map.getElasticsearchBulkQueueDepth() >= 1 ) {
                                 BulkRequest.Builder br = new BulkRequest.Builder();
                                 ObjectMapper objectMapper = new ObjectMapper();
                                 InputStream input;
@@ -135,7 +135,7 @@ public class WorkloadGeneratorEngine implements Engine {
                                         .withJson(input)
                                 );
                                 IndexResponse response = esClient.index(request);
-                                log.debug("Document" + response.id() + "Indexed with version " + response.version());
+                                log.debug("Document " + response.id() + " Indexed with version " + response.version());
                             }
                             //TODO: This is where the periodicity/peak-spike logic goes
                             Thread.sleep(workload.getWorkloadSleep());

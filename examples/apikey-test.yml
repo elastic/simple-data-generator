@@ -6,6 +6,7 @@ elasticsearchPassword: <REQUIRED>
 elasticsearchApiKeyEnabled: false
 elasticsearchApiKeyId: <OPTIONAL>
 elasticsearchApiKeySecret: <OPTIONAL>
+elasticsearchBulkQueueDepth: 0
 keystoreLocation: keystore.jks
 keystorePassword: <REQUIRED>
 workloads:
