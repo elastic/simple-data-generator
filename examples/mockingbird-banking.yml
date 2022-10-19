@@ -1,0 +1,93 @@
+elasticsearchScheme: https
+elasticsearchHost: 
+elasticsearchPort: 9243
+elasticsearchUser: elastic
+elasticsearchPassword: 
+elasticsearchApiKeyId: 
+elasticsearchApiKeySecret: 
+keystoreLocation: keystore.jks
+keystorePassword: t0ena1ls
+workloads:
+  - workloadName: dda_customer
+    workloadThreads: 1
+    workloadSleep: 10
+    indexName: mbb_customer_info
+    fields:
+      - name: eai
+        type: double
+        range: 0,3300000
+      - name: name
+        type: full_name
+      - name: location
+        type: state
+      - name: address
+        type: address
+
+  - workloadName: dda_transaction_history
+    workloadThreads: 1
+    workloadSleep: 10
+    indexName: mbb_dda_transaction_history
+    fields:
+      - name: eai
+        type: double
+        range: 0,3300000
+      - type: float
+        range: -1000000,1000000
+
+  - workloadName: customer_support_history
+    workloadThreads: 1
+    workloadSleep: 1000
+    indexName: mbb_customer_support_history
+    fields:
+      - name: eai
+        type: double
+        range: 0,3300000
+      - name: support_type
+        type: random_string_from_list
+        custom_list: Card-Reissue, Check-Balance, Address-Change, Close-Account, Fraud-Dispute, Information-Change
+
+  - workloadName: lockbox_service_history
+    workloadThreads: 1
+    workloadSleep: 1000
+    indexName: mbb_lockbox_history
+    fields:
+      - name: eai
+        type: double
+        range: 0,3300000
+      - name: vault_id
+        type: double
+        range: 0,1200000
+      - name: access_date
+        type: date
+
+  - workloadName: branch_service_history
+    workloadThreads: 1
+    workloadSleep: 1000
+    indexName: mbb_branch_service_history
+    fields:
+      - name: eai
+        type: double
+        range: 0,3300000
+      - name: activity_type
+        type: random_string_from_list
+        custom_list: deposit, withdrawl
+      - name: amount
+        type: float
+        range: -1000000,1000000
+
+  - workloadName: credit_card_history
+    workloadThreads: 1
+    workloadSleep: 1000
+    indexName: mbb_credit_card_history
+    fields:
+      - name: eai
+        type: double
+        range: 0,3300000
+      - name: credit_card_no
+        type: credit_card_number
+      - name: merchant_id
+        type: double
+        range: 0,100000000
+      - name: trans_type
+        type: random_string_from_list
+        custom_list: pre-auth,auth,decline,inquiry,memo
