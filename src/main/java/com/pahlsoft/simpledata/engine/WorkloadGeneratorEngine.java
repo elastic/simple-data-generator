@@ -4,11 +4,9 @@ import co.elastic.apm.api.ElasticApm;
 import co.elastic.apm.api.Span;
 import co.elastic.apm.api.Transaction;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch.cat.IndicesRequest;
 import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
 import co.elastic.clients.elasticsearch.indices.DeleteIndexResponse;
-import co.elastic.clients.elasticsearch.indices.IndexCheckOnStartup;
 import co.elastic.clients.json.JsonData;
 import co.elastic.clients.json.JsonpMapper;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
@@ -64,10 +62,8 @@ public class WorkloadGeneratorEngine implements Engine {
     RestClient restClient = null;
     ElasticsearchTransport transport = null;
     ElasticsearchClient esClient = null;
-
     JSONObject indexMapping;
     JSONObject indexSettings;
-    JSONObject indexConfiguration;
 
     String jsonString;
 
@@ -113,9 +109,6 @@ public class WorkloadGeneratorEngine implements Engine {
             // And create the API client
             esClient = new ElasticsearchClient(transport);
 
-            //TODO: Create a method that builds a json object with the mappings for the new index based on the workload
-            // if the index doesn't exist and we're asked to create mapping error out.
-            // otherwise create the index-mapping based on config and the JSON object.
             // TODO: extract this logic into methods to clean up readability
             if (workload.getPurgeExistingIndex()) {
                 log.info("Purging Existing Index");
@@ -147,7 +140,7 @@ public class WorkloadGeneratorEngine implements Engine {
                     log.error("Unable to build Mapping or Settings for Workload " + workload.getWorkloadName());
                 }
 
-                //Create Index
+                //Create The Index
                 try {
                     CreateIndexRequest req = null;
                     // Build the JSON for mapping information
@@ -157,7 +150,6 @@ public class WorkloadGeneratorEngine implements Engine {
                     // create index based on configuration
                     req = CreateIndexRequest.of(b -> b
                             .index(workload.getIndexName())
-
                             .withJson(jsonStream)
                     );
 
