@@ -79,7 +79,6 @@ public class WorkloadGeneratorEngine implements Engine {
 
         if (log.isInfoEnabled()) {
             log.info(MessageFormat.format("Starting Workload Generation Engine Workload: {0} Thread: {1}", workload.getWorkloadName(), Thread.currentThread().getId()));
-            log.info("Workload Name: " + workload.getWorkloadName());
             log.info("Workload Thread Count: " + workload.getWorkloadThreads());
             log.info("Workload Sleep Time (ms): " + workload.getWorkloadSleep());
             log.info("Workload Purge Existing Index: " + workload.getPurgeExistingIndex());
