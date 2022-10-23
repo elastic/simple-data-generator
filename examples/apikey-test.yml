@@ -13,6 +13,9 @@ workloads:
   - workloadName: application_a
     workloadThreads: 1
     workloadSleep: 250
+    primaryShardCount: 3
+    replicaShardCount: 0
+    purgeExistingIndex: true
     indexName: sdg-a
     fields:
       - name: temperature
@@ -26,6 +29,9 @@ workloads:
   - workloadName: application_b
     workloadThreads: 1
     workloadSleep: 1000
+    primaryShardCount: 3
+    replicaShardCount: 0
+    purgeExistingIndex: true
     indexName: application-b
     fields:
       - name: credit_card

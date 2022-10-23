@@ -4,21 +4,25 @@ import co.elastic.apm.api.ElasticApm;
 import co.elastic.apm.api.Span;
 import co.elastic.apm.api.Transaction;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch.core.BulkRequest;
-import co.elastic.clients.elasticsearch.core.BulkResponse;
-import co.elastic.clients.elasticsearch.core.IndexRequest;
-import co.elastic.clients.elasticsearch.core.IndexResponse;
+import co.elastic.clients.elasticsearch.cat.IndicesRequest;
+import co.elastic.clients.elasticsearch.core.*;
+import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
+import co.elastic.clients.elasticsearch.indices.DeleteIndexResponse;
+import co.elastic.clients.elasticsearch.indices.IndexCheckOnStartup;
 import co.elastic.clients.json.JsonData;
 import co.elastic.clients.json.JsonpMapper;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
+import co.elastic.clients.transport.endpoints.BooleanResponse;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pahlsoft.simpledata.generator.WorkloadGenerator;
 import com.pahlsoft.simpledata.interfaces.Engine;
 import com.pahlsoft.simpledata.model.Configuration;
 import com.pahlsoft.simpledata.model.Workload;
+
 import jakarta.json.spi.JsonProvider;
+
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -31,6 +35,8 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.SSLContexts;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +65,14 @@ public class WorkloadGeneratorEngine implements Engine {
     ElasticsearchTransport transport = null;
     ElasticsearchClient esClient = null;
 
+    JSONObject indexMapping;
+    JSONObject indexSettings;
+    JSONObject indexConfiguration;
+
+    String jsonString;
+
+    InputStream jsonStream;
+
     public WorkloadGeneratorEngine(final Configuration config_map, final Workload workload) {
         this.config_map = config_map;
         this.workload = workload;
@@ -69,6 +83,12 @@ public class WorkloadGeneratorEngine implements Engine {
 
         if (log.isInfoEnabled()) {
             log.info(MessageFormat.format("Starting Workload Generation Engine Workload: {0} Thread: {1}", workload.getWorkloadName(), Thread.currentThread().getId()));
+            log.info("Workload Name: " + workload.getWorkloadName());
+            log.info("Workload Thread Count: " + workload.getWorkloadThreads());
+            log.info("Workload Sleep Time (ms): " + workload.getWorkloadSleep());
+            log.info("Workload Purge Existing Index: " + workload.getPurgeExistingIndex());
+            log.info("Workload Index Primary Shard Count: " + workload.getPrimaryShardCount());
+            log.info("Workload Index Replica Shard Count: " + workload.getReplicaShardCount());
         }
 
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
@@ -88,6 +108,82 @@ public class WorkloadGeneratorEngine implements Engine {
                 restClient = getClient(credentialsProvider).build();
             }
 
+            // Create the transport with a Jackson mapper
+            transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
+            // And create the API client
+            esClient = new ElasticsearchClient(transport);
+
+            //TODO: Create a method that builds a json object with the mappings for the new index based on the workload
+            // if the index doesn't exist and we're asked to create mapping error out.
+            // otherwise create the index-mapping based on config and the JSON object.
+            // TODO: extract this logic into methods to clean up readability
+            if (workload.getPurgeExistingIndex()) {
+                log.info("Purging Existing Index");
+                try {
+                    BooleanResponse existResponse;
+                    existResponse = esClient.indices().exists(b -> b.index(workload.getIndexName()));
+
+                    if (existResponse.value()) {
+                        log.info("Index "+ workload.getIndexName() + " deleting");
+                        try {
+                            DeleteIndexResponse deleteResponse;
+                            deleteResponse = esClient.indices().delete(b -> b.index(workload.getIndexName()));
+                            if (deleteResponse.acknowledged()) { log.info("Index "+ workload.getIndexName() + " deleted");}
+                        } catch (IOException ioe) {
+                            log.error("Error Deleting Index: " + workload.getIndexName());
+                        }
+                    }
+                } catch (IOException ioe) {
+                    log.error("Error Checking if Index Exists: " + workload.getIndexName());
+                }
+
+                // Create a Mapping and settings based on Workload (include settings)
+                //TODO: Need to do settings after mapping is figured out
+                try {
+                    indexMapping = WorkloadGenerator.buildMapping(workload);
+                    indexSettings = WorkloadGenerator.buildSettings(workload);
+
+                } catch (JSONException e) {
+                    log.error("Unable to build Mapping or Settings for Workload " + workload.getWorkloadName());
+                }
+
+                //Create Index
+                try {
+                    CreateIndexRequest req = null;
+                    // Build the JSON for mapping information
+                    jsonString = indexSettings.getJSONObject(String.valueOf("setting")).toString();
+                    jsonString += "," + indexMapping.getJSONObject(String.valueOf("mapping")).toString();
+                    jsonStream = new ByteArrayInputStream(jsonString.getBytes());
+                    // create index based on configuration
+                    req = CreateIndexRequest.of(b -> b
+                            .index(workload.getIndexName())
+
+                            .withJson(jsonStream)
+                    );
+
+                    boolean created = esClient.indices().create(req).acknowledged();
+                    if (created) log.info("Mapping created for index: " + workload.getIndexName());
+
+                } catch (Exception e) {
+                    log.error("Cannot build mapping for index: " + workload.getIndexName());
+                    log.error(e.getMessage());
+                }
+
+            } else {
+                //  if index exists do nothing but report index already exists with mappings, Skipping
+                try {
+                    BooleanResponse existResponse;
+                    existResponse = esClient.indices().exists(b -> b.index(workload.getIndexName()));
+                    if (existResponse.value()) { log.info("Index " + workload.getIndexName() + " exists. Not updating mappings or settings.");}
+                } catch (IOException ioe) {
+                    log.error("Error Checking if Index Exists: " + workload.getIndexName());
+                }
+            }
+
+            //////////////////////////
+            // MAIN ENGINE LOOP BELOW
+            /////////////////////////
+
             boolean engineRun = true;
             while(engineRun) {
                 Transaction transaction = ElasticApm.startTransaction();
@@ -99,10 +195,6 @@ public class WorkloadGeneratorEngine implements Engine {
                     setSpanInfo(span, "indexRequest: ", workload.getIndexName());
                     span.activate();
 
-                    // Create the transport with a Jackson mapper
-                    transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
-                    // And create the API client
-                    esClient = new ElasticsearchClient(transport);
                     try {
                             //Bulk Docs
                             if (config_map.getElasticsearchBulkQueueDepth() >= 1 ) {
@@ -111,7 +203,6 @@ public class WorkloadGeneratorEngine implements Engine {
                                 InputStream input;
 
                                 for (int bulkItems=0; bulkItems < config_map.getElasticsearchBulkQueueDepth(); bulkItems++) {
-                                    //TODO:  need to optimize
                                     input = new ByteArrayInputStream(objectMapper.writeValueAsString(WorkloadGenerator.buildDocument(workload)).getBytes());
                                     JsonData jsonp = readJson(input, esClient);
                                     br.operations(op -> op

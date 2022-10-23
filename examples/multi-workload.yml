@@ -13,6 +13,9 @@ workloads:
   - workloadName: iot
     workloadThreads: 2
     workloadSleep: 250
+    primaryShardCount: 3
+    replicaShardCount: 0
+    purgeExistingIndex: true
     indexName: iot-data
     fields:
       - name: temperature
@@ -21,6 +24,9 @@ workloads:
   - workloadName: mortgage
     workloadThreads: 1
     workloadSleep: 1000
+    primaryShardCount: 3
+    replicaShardCount: 0
+    purgeExistingIndex: true
     indexName: mortgage-data
     fields:
       - name: loan.platform

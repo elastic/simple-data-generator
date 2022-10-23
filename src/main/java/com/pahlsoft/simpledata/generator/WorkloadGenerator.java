@@ -6,6 +6,8 @@ import com.github.javafaker.Faker;
 import java.util.*;
 
 import com.pahlsoft.simpledata.model.Workload;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class WorkloadGenerator {
 
@@ -200,6 +202,125 @@ public class WorkloadGenerator {
         }
 
         return jsonMap;
+    }
+
+    @CaptureSpan
+    public static JSONObject buildMapping(Workload workload) throws JSONException {
+        JSONObject mainObject = new JSONObject();
+        JSONObject mappingObject = new JSONObject();
+        JSONObject mappingsObject = new JSONObject();
+        JSONObject propertiesObject = new JSONObject();
+
+        Map<String, Object> jsonMap = new HashMap<>();
+
+        // Go through each field in the workload
+        Iterator iterator = workload.getFields().iterator();
+        Map<String,String> field;
+
+        while (iterator.hasNext()) {
+            field = (Map<String, String>) iterator.next();
+            switch(field.get("type")){
+                case "int":
+                case "zipcode":
+                case "random_integer_from_list":
+                    Map<String,String> integerField = new HashMap<>();
+                    integerField.put("type","integer");
+                    propertiesObject.put(field.get("name"),integerField);
+                    break;
+                case "float":
+                case "random_float_from_list":
+                    Map<String,String> floatField = new HashMap<>();
+                    floatField.put("type","float");
+                    propertiesObject.put(field.get("name"),floatField);
+                    break;
+                case "random_long_from_list":
+                    Map<String,String> longField = new HashMap<>();
+                    longField.put("type","long");
+                    propertiesObject.put(field.get("name"),longField);
+                    break;
+                case "boolean":
+                    Map<String,String> booleanField = new HashMap<>();
+                    booleanField.put("type","boolean");
+                    propertiesObject.put(field.get("name"),booleanField);
+                    break;
+                case "full_name":
+                case "last_name":
+                case "first_name":
+                case "full_address":
+                case "street_address":
+                case "city":
+                case "country":
+                case "country_code":
+                case "state":
+                case "phone_number":
+                case "credit_card_number":
+                case "ssn":
+                case "product_name":
+                case "group":
+                case "uuid":
+                case "path":
+                case "hostname":
+                case "appname":
+                case "url":
+                case "random_string_from_list":
+                case "mac_address":
+                case "email":
+                case "domain":
+                case "hash":
+                case "random_cn_fact":
+                case "random_got_character":
+                case "random_occupation":
+                case "iban":
+                case "team_name":
+                case "constant_string" :
+                case "timezone":
+                    Map<String,String> fullNameField = new HashMap<>();
+                    fullNameField.put("type","text");
+                    propertiesObject.put(field.get("name"),fullNameField);
+                    break;
+                case "geo_point":
+                    Map<String,String> geoPointField = new HashMap<>();
+                    geoPointField.put("type","geo_point");
+                    propertiesObject.put(field.get("name"),geoPointField);
+                    break;
+                case "ipv4":
+                    Map<String,String> ipField = new HashMap<>();
+                    ipField.put("type","ip");
+                    propertiesObject.put(field.get("name"),ipField);
+                    break;
+                case "date":
+                    Map<String,String> dateField = new HashMap<>();
+                    dateField.put("type","date");
+                    propertiesObject.put(field.get("name"),dateField);
+                default:
+                    Map<String,String> keywordField = new HashMap<>();
+                    keywordField.put("type","keyword");
+                    propertiesObject.put(field.get("name"),keywordField);
+                    break;
+            }
+        }
+
+        mappingsObject.put("properties",propertiesObject);
+        mappingObject.put("mappings",mappingsObject);
+        mainObject.put("mapping",mappingObject);
+
+        return mainObject;
+    }
+
+    @CaptureSpan
+    public static JSONObject buildSettings(Workload workload) throws JSONException {
+        JSONObject indexObject = new JSONObject();
+        JSONObject settingsObject = new JSONObject();
+        JSONObject settingObject = new JSONObject();
+        JSONObject mainObject = new JSONObject();
+
+        indexObject.put("number_of_shards", workload.getPrimaryShardCount());
+        indexObject.put("number_of_replicas",workload.getReplicaShardCount());
+
+        settingsObject.put("index",indexObject);
+        settingObject.put("settings", settingsObject);
+        mainObject.put("setting", settingObject);
+        return mainObject;
     }
 
     private static String getRandomString(String[] listOfThings) {

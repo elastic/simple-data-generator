@@ -2,6 +2,7 @@
 *.swp
 *.jks
 .gradle/*
+gradle/*
 .idea/*
 out
 *.protect

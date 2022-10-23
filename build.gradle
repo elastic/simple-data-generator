@@ -3,8 +3,6 @@ plugins {
 }
 group 'com.pahlsoft.examples.simpledata'
 
-sourceCompatibility = 18
-
 //create a single Jar with all dependencies
 tasks.register('fatJar', Jar) {
 
