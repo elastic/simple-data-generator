@@ -44,8 +44,11 @@ keystorePassword: <REQUIRED>
 workloads:
   - workloadName: workload_1
     workloadThreads: 1
-    workloadSleep: 1000
-    indexName: index-1
+    workloadSleep: 1000    
+    primaryShardCount: 3
+    replicaShardCount: 1
+    purgeExistingIndex: true
+    indexName: index-1    
     fields:
       - name: account_number
         type: int
@@ -75,6 +78,9 @@ workloads:
   - workloadName: workload_1
     workloadThreads: 1
     workloadSleep: 1000
+    primaryShardCount: 1
+    replicaShardCount: 1
+    purgeExistingIndex: true
     indexName: index-1
     fields:
       - name: account_number
@@ -83,6 +89,9 @@ workloads:
    - workloadName: workload_2
     workloadThreads: 1
     workloadSleep: 1000
+    primaryShardCount: 3
+    replicaShardCount: 1
+    purgeExistingIndex: true
     indexName: index-2
     fields:
       - name: inventory_part_number
