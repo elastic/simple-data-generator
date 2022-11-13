@@ -41,13 +41,13 @@ elasticsearchApiKeySecret: <OPTIONAL>
 elasticsearchBulkQueueDepth: 0
 keystoreLocation: keystore.jks
 keystorePassword: <REQUIRED>
+purgeOnStart: true
 workloads:
   - workloadName: workload_1
     workloadThreads: 1
     workloadSleep: 1000    
     primaryShardCount: 3
     replicaShardCount: 1
-    purgeExistingIndex: true
     indexName: index-1    
     fields:
       - name: account_number
@@ -80,7 +80,6 @@ workloads:
     workloadSleep: 1000
     primaryShardCount: 1
     replicaShardCount: 1
-    purgeExistingIndex: true
     indexName: index-1
     fields:
       - name: account_number
