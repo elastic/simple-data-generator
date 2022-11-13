@@ -9,13 +9,13 @@ elasticsearchApiKeySecret: <OPTIONAL>
 elasticsearchBulkQueueDepth: 0
 keystoreLocation: keystore.jks
 keystorePassword: <REQUIRED>
+purgeOnStart: true
 workloads:
   - workloadName: iot
     workloadThreads: 2
     workloadSleep: 250
     primaryShardCount: 3
     replicaShardCount: 0
-    purgeExistingIndex: true
     indexName: iot-data
     fields:
       - name: temperature
@@ -26,7 +26,6 @@ workloads:
     workloadSleep: 1000
     primaryShardCount: 3
     replicaShardCount: 0
-    purgeExistingIndex: true
     indexName: mortgage-data
     fields:
       - name: loan.platform

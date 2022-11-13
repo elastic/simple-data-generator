@@ -9,13 +9,13 @@ elasticsearchApiKeySecret: <OPTIONAL>
 elasticsearchBulkQueueDepth: 0
 keystoreLocation: keystore.jks
 keystorePassword: <REQUIRED>
+purgeOnStart: true
 workloads:
   - workloadName: financial_workload
     workloadThreads: 1
     workloadSleep: 1000
     primaryShardCount: 3
     replicaShardCount: 0
-    purgeExistingIndex: true
     indexName: financial-data
     fields:
       - name: account_number
@@ -47,7 +47,6 @@ workloads:
     workloadSleep: 1000
     primaryShardCount: 3
     replicaShardCount: 0
-    purgeExistingIndex: true
     indexName: inventory-data
     fields:
       - name: item_number

@@ -9,13 +9,13 @@ elasticsearchApiKeySecret: <OPTIONAL>
 elasticsearchBulkQueueDepth: 0
 keystoreLocation: keystore.jks
 keystorePassword: <REQUIRED>
+purgeOnStart: true
 workloads:
   - workloadName: mortgage_workload
     workloadThreads: 1
     workloadSleep: 1000
     primaryShardCount: 3
     replicaShardCount: 0
-    purgeExistingIndex: true
     indexName: mortgage-data
     fields:
       - name: loan.platform

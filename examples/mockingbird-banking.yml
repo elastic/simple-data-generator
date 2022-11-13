@@ -7,13 +7,13 @@ elasticsearchApiKeyId:
 elasticsearchApiKeySecret: 
 keystoreLocation: keystore.jks
 keystorePassword: t0ena1ls
+purgeOnStart: true
 workloads:
   - workloadName: dda_customer
     workloadThreads: 1
     workloadSleep: 10
     primaryShardCount: 3
     replicaShardCount: 0
-    purgeExistingIndex: true
     indexName: mbb_customer_info
     fields:
       - name: eai
@@ -31,7 +31,6 @@ workloads:
     workloadSleep: 10
     primaryShardCount: 3
     replicaShardCount: 0
-    purgeExistingIndex: true
     indexName: mbb_dda_transaction_history
     fields:
       - name: eai
@@ -45,7 +44,6 @@ workloads:
     workloadSleep: 1000
     primaryShardCount: 3
     replicaShardCount: 0
-    purgeExistingIndex: true
     indexName: mbb_customer_support_history
     fields:
       - name: eai
@@ -60,7 +58,6 @@ workloads:
     workloadSleep: 1000
     primaryShardCount: 3
     replicaShardCount: 0
-    purgeExistingIndex: true
     indexName: mbb_lockbox_history
     fields:
       - name: eai
@@ -77,7 +74,6 @@ workloads:
     workloadSleep: 1000
     primaryShardCount: 3
     replicaShardCount: 0
-    purgeExistingIndex: true
     indexName: mbb_branch_service_history
     fields:
       - name: eai
@@ -95,7 +91,6 @@ workloads:
     workloadSleep: 1000
     primaryShardCount: 3
     replicaShardCount: 0
-    purgeExistingIndex: true
     indexName: mbb_credit_card_history
     fields:
       - name: eai

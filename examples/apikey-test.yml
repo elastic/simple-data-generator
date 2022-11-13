@@ -9,13 +9,13 @@ elasticsearchApiKeySecret: <OPTIONAL>
 elasticsearchBulkQueueDepth: 0
 keystoreLocation: keystore.jks
 keystorePassword: <REQUIRED>
+purgeOnStart: true
 workloads:
   - workloadName: application_a
     workloadThreads: 1
     workloadSleep: 250
     primaryShardCount: 3
     replicaShardCount: 0
-    purgeExistingIndex: true
     indexName: sdg-a
     fields:
       - name: temperature
@@ -31,7 +31,6 @@ workloads:
     workloadSleep: 1000
     primaryShardCount: 3
     replicaShardCount: 0
-    purgeExistingIndex: true
     indexName: application-b
     fields:
       - name: credit_card
