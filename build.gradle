@@ -33,7 +33,7 @@ repositories {
 
 dependencies {
     testCompileOnly group: 'junit', name: 'junit', version: '4.12'
-            implementation 'co.elastic.clients:elasticsearch-java:8.4.2', 'org.json:org.json:chargebee-1.0',
+            implementation 'co.elastic.clients:elasticsearch-java:8.5.0', 'org.json:org.json:chargebee-1.0',
     'com.fasterxml.jackson.core:jackson-databind:2.12.3',
             'org.slf4j:slf4j-api:1.7.36', 'ch.qos.logback:logback-classic:1.2.11', 'ch.qos.logback:logback-core:1.2.11',
             'com.github.javafaker:javafaker:1.0.2', 'co.elastic.apm:apm-agent-api:1.33.0', 'org.apache.logging.log4j:log4j-core:2.17.2', 'org.yaml:snakeyaml:1.33'

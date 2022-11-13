@@ -206,7 +206,6 @@ public class WorkloadGenerator {
 
     @CaptureSpan
     public static JSONObject buildMapping(Workload workload) throws JSONException {
-        JSONObject mainObject = new JSONObject();
         JSONObject mappingObject = new JSONObject();
         JSONObject mappingsObject = new JSONObject();
         JSONObject propertiesObject = new JSONObject();
@@ -301,26 +300,26 @@ public class WorkloadGenerator {
         }
 
         mappingsObject.put("properties",propertiesObject);
-        mappingObject.put("mappings",mappingsObject);
-        mainObject.put("mapping",mappingObject);
+        //mappingObject.put("mappings",mappingsObject);
 
-        return mainObject;
+
+        return mappingsObject;
     }
 
     @CaptureSpan
     public static JSONObject buildSettings(Workload workload) throws JSONException {
         JSONObject indexObject = new JSONObject();
         JSONObject settingsObject = new JSONObject();
-        JSONObject settingObject = new JSONObject();
-        JSONObject mainObject = new JSONObject();
+        //JSONObject settingObject = new JSONObject();
 
         indexObject.put("number_of_shards", workload.getPrimaryShardCount());
         indexObject.put("number_of_replicas",workload.getReplicaShardCount());
 
         settingsObject.put("index",indexObject);
-        settingObject.put("settings", settingsObject);
-        mainObject.put("setting", settingObject);
-        return mainObject;
+
+        //settingObject.put("settings", settingsObject);
+
+        return settingsObject;
     }
 
     private static String getRandomString(String[] listOfThings) {

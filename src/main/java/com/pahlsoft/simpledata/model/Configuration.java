@@ -16,6 +16,16 @@ public class Configuration {
     private String keystoreLocation;
     private String keystorePassword;
     private List<Workload> workloads;
+    private Boolean purgeOnStart;
+
+
+    public Boolean getPurgeOnStart() {
+        return purgeOnStart;
+    }
+
+    public void setPurgeOnStart(Boolean purgeOnStart) {
+        this.purgeOnStart = purgeOnStart;
+    }
 
     public String getElasticsearchScheme() {
         return elasticsearchScheme;

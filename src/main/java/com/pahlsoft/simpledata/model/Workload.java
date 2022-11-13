@@ -9,7 +9,6 @@ public class Workload {
     private int workloadSleep;
     private String indexName;
     private List<Map<String,Object>> fields;
-    private Boolean purgeExistingIndex;
     private int primaryShardCount;
     private int replicaShardCount;
 
@@ -27,14 +26,6 @@ public class Workload {
 
     public void setReplicaShardCount(int replicaShardCount) {
         this.replicaShardCount = replicaShardCount;
-    }
-
-    public Boolean getPurgeExistingIndex() {
-        return purgeExistingIndex;
-    }
-
-    public void setPurgeExistingIndex(Boolean purgeExistingIndex) {
-        this.purgeExistingIndex = purgeExistingIndex;
     }
 
     public String getWorkloadName() {
