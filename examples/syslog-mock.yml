@@ -1,0 +1,29 @@
+elasticsearchScheme: https
+elasticsearchHost: <COMPLETE_ME>
+elasticsearchPort: <COMPLETE_ME>
+elasticsearchUser: <COMPLETE_ME>
+elasticsearchPassword: <COMPLETE_ME>
+elasticsearchApiKeyEnabled: false
+elasticsearchApiKeyId: 
+elasticsearchBulkQueueDepth: 1
+keystoreLocation: keystore.jks
+keystorePassword: t0ena1ls
+purgeOnStart: false
+workloads:
+  - workloadName: sdg-syslog-test
+    workloadThreads: 5
+    workloadSleep: 10
+    indexName: sdg-syslog-data
+    primaryShardCount: 1
+    replicaShardCount: 0
+    fields:
+      - name: priority
+      - name: version
+      - name: event_date_time
+      - name: hostname
+      - name: application
+      - name: process_id
+      - name: message_id
+      - name: structured_data
+      - name: encoding
+      - name: message
