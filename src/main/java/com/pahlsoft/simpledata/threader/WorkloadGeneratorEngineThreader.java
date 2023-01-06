@@ -13,7 +13,7 @@ public class WorkloadGeneratorEngineThreader {
 
 
     private WorkloadGeneratorEngineThreader() {
-        throw new IllegalStateException("Utility class");
+        throw new IllegalStateException(this.getClass().getName());
     }
 
     public static void runEngine(int threadCount, Engine engine)   {

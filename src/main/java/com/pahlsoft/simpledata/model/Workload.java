@@ -9,8 +9,16 @@ public class Workload {
     private int workloadSleep;
     private String indexName;
     private List<Map<String,Object>> fields;
+
+    private int backendBulkQueueDepth;
+
+    private Boolean purgeOnStart;
+
     private int primaryShardCount;
     private int replicaShardCount;
+
+    public Workload() {
+    }
 
     public int getPrimaryShardCount() {
         return primaryShardCount;
@@ -66,5 +74,21 @@ public class Workload {
 
     public void setIndexName(String indexName) {
         this.indexName = indexName;
+    }
+
+    public int getBackendBulkQueueDepth() {
+        return backendBulkQueueDepth;
+    }
+
+    public void setBackendBulkQueueDepth(int backendBulkQueueDepth) {
+        this.backendBulkQueueDepth = backendBulkQueueDepth;
+    }
+
+    public Boolean getPurgeOnStart() {
+        return purgeOnStart;
+    }
+
+    public void setPurgeOnStart(Boolean purgeOnStart) {
+        this.purgeOnStart = purgeOnStart;
     }
 }
