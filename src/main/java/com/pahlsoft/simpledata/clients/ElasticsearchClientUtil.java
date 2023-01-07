@@ -1,5 +1,6 @@
 package com.pahlsoft.simpledata.clients;
 
+import co.elastic.apm.api.CaptureSpan;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.indices.DeleteIndexResponse;
 import co.elastic.clients.elasticsearch.indices.DeleteIndexTemplateResponse;
@@ -54,6 +55,7 @@ public class ElasticsearchClientUtil implements ClientUtil {
     private static RestClient restClient = null;
     private static ElasticsearchClient esClient = null;
 
+    @CaptureSpan
     public static ElasticsearchClient createClient(final Configuration configuration, final Workload workload) {
        setupElasticsearch(configuration, workload);
        return esClient;

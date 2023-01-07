@@ -1,5 +1,6 @@
 package com.pahlsoft.simpledata.generator;
 
+import co.elastic.apm.api.CaptureSpan;
 import com.github.javafaker.Faker;
 
 import java.util.*;
@@ -17,6 +18,7 @@ public class WorkloadGenerator {
     private static Faker faker = new Faker(new Locale("en-US"));
 
 
+    @CaptureSpan
     public static Map buildDocument(Workload workload) {
 
 
@@ -203,7 +205,7 @@ public class WorkloadGenerator {
         return jsonMap;
     }
 
-
+    @CaptureSpan
     public static JSONObject buildMapping(Workload workload) throws JSONException {
         JSONObject mappingObject = new JSONObject();
         JSONObject mappingsObject = new JSONObject();
@@ -306,6 +308,7 @@ public class WorkloadGenerator {
     }
 
 
+    @CaptureSpan
     public static JSONObject buildSettings(Workload workload) throws JSONException {
         JSONObject indexObject = new JSONObject();
         JSONObject settingsObject = new JSONObject();
