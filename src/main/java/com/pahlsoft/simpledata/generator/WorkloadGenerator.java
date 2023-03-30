@@ -15,24 +15,20 @@ public class WorkloadGenerator {
         throw new IllegalStateException("WorkloadGenerator class");
     }
 
-    private static Faker faker = new Faker(new Locale("en-US"));
+    private static final Faker faker = new Faker(new Locale("en-US"));
 
 
     @CaptureSpan
-    public static Map buildDocument(Workload workload) {
-
-
+    @SuppressWarnings("unchecked")
+    public static Map<String, Object> buildDocument(Workload workload) {
         Map<String, Object> jsonMap = new HashMap<>();
-
-        jsonMap.put("@timestamp", new Date());
-
+        jsonMap.put("record_creation_time", new Date());
         // Go through each field in the workload
         Iterator iterator = workload.getFields().iterator();
         Map<String,String> field;
 
         while (iterator.hasNext()) {
             field = (Map<String,String>) iterator.next();
-
             switch(field.get("type")){
                 case "empty":
                     jsonMap.put(field.get("name"),"");
@@ -206,19 +202,18 @@ public class WorkloadGenerator {
     }
 
     @CaptureSpan
+    @SuppressWarnings("unchecked")
     public static JSONObject buildMapping(Workload workload) throws JSONException {
-        JSONObject mappingObject = new JSONObject();
         JSONObject mappingsObject = new JSONObject();
         JSONObject propertiesObject = new JSONObject();
 
-        Map<String, Object> jsonMap = new HashMap<>();
-
         // Go through each field in the workload
         Iterator iterator = workload.getFields().iterator();
-        Map<String,String> field;
+        Map<String, String> field;
 
         while (iterator.hasNext()) {
-            field = (Map<String, String>) iterator.next();
+            field = (Map<String,String>) iterator.next();
+
             switch(field.get("type")){
                 case "int":
                 case "zipcode":
@@ -289,6 +284,8 @@ public class WorkloadGenerator {
                     propertiesObject.put(field.get("name"),ipField);
                     break;
                 case "date":
+                case "record_creation_time":
+                case "timestamp":
                     Map<String,String> dateField = new HashMap<>();
                     dateField.put("type","date");
                     propertiesObject.put(field.get("name"),dateField);
@@ -301,9 +298,6 @@ public class WorkloadGenerator {
         }
 
         mappingsObject.put("properties",propertiesObject);
-        //mappingObject.put("mappings",mappingsObject);
-
-
         return mappingsObject;
     }
 
@@ -312,14 +306,11 @@ public class WorkloadGenerator {
     public static JSONObject buildSettings(Workload workload) throws JSONException {
         JSONObject indexObject = new JSONObject();
         JSONObject settingsObject = new JSONObject();
-        //JSONObject settingObject = new JSONObject();
 
         indexObject.put("number_of_shards", workload.getPrimaryShardCount());
         indexObject.put("number_of_replicas",workload.getReplicaShardCount());
 
         settingsObject.put("index",indexObject);
-
-        //settingObject.put("settings", settingsObject);
 
         return settingsObject;
     }

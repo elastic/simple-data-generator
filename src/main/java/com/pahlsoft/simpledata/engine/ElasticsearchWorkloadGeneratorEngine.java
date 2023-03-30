@@ -19,6 +19,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.text.MessageFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class ElasticsearchWorkloadGeneratorEngine implements Engine {
 
@@ -107,7 +112,7 @@ public class ElasticsearchWorkloadGeneratorEngine implements Engine {
                     }
 
                     //TODO: This is where the periodicity/peak-spike logic goes
-                    Thread.sleep(workload.getWorkloadSleep());
+                    Thread.sleep(calculateSleepDuration());
                 } catch (Exception e) {
                     log.debug("Indexing Error:" + e.getMessage());
                     if (log.isDebugEnabled()) {
@@ -135,6 +140,40 @@ public class ElasticsearchWorkloadGeneratorEngine implements Engine {
             JsonpMapper jsonpMapper = esClient._transport().jsonpMapper();
             JsonProvider jsonProvider = jsonpMapper.jsonProvider();
         return JsonData.from(jsonProvider.createParser(input), jsonpMapper);
+    }
+
+    private int calculateSleepDuration() {
+        if (workload.getPeakTime().isEmpty()) {  // Peak time is priority over static time.
+            log.debug("Static Sleep Used");
+            return workload.getWorkloadSleep();
+        } else {
+            // Get the current time
+            LocalTime currentTime = LocalTime.now();
+
+            LocalTime peakTime = LocalTime.parse(workload.getPeakTime(),DateTimeFormatter.ISO_LOCAL_TIME);
+
+            // Calculate the time difference in seconds
+            long timeDifference = ChronoUnit.SECONDS.between(currentTime, peakTime);
+
+            // Assuming the maximum time difference is 1 day (86400 seconds) for the scaling
+            double maxTimeDifference = 86400.0;
+
+            // Calculate the position in the sine wave based on the time difference
+            double position = (Math.PI / 2) * (timeDifference / maxTimeDifference);
+
+            // Adjust the position for past peak time
+            if (timeDifference < 0) {
+                position = Math.PI - position;
+            }
+
+            // Calculate the sine wave value based on the position
+            double sineValue = Math.sin(position) * Math.cos(position);
+
+            // Scale the sine value to the range of 1 to 10000
+            int value = (int) (1 + (9999 * sineValue));
+            log.debug("Peak Time used to calculate Sleep at " +value + "ms)");
+            return value;
+        }
     }
 
 }

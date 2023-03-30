@@ -16,6 +16,7 @@ public class Workload {
 
     private int primaryShardCount;
     private int replicaShardCount;
+    private String peakTime;
 
     public Workload() {
     }
@@ -90,5 +91,13 @@ public class Workload {
 
     public void setPurgeOnStart(Boolean purgeOnStart) {
         this.purgeOnStart = purgeOnStart;
+    }
+
+    public String getPeakTime() {
+        return peakTime;
+    }
+
+    public void setPeakTime(String peakTime) {
+        this.peakTime = peakTime;
     }
 }

@@ -1,6 +1,7 @@
 package com.pahlsoft.simpledata.runner;
 
 import com.pahlsoft.simpledata.clients.ElasticsearchClientUtil;
+import com.pahlsoft.simpledata.engine.ClickhouseWorkloadGeneratorEngine;
 import com.pahlsoft.simpledata.engine.ElasticsearchWorkloadGeneratorEngine;
 import com.pahlsoft.simpledata.model.Configuration;
 import com.pahlsoft.simpledata.model.Workload;
@@ -39,6 +40,7 @@ public class EngineRunner {
                     case "CLICKHOUSE":
                         //TODO: Code the Clickhouse Generator Engine
                         System.out.println("Code Click House Engine...");
+                        WorkloadGeneratorEngineThreader.runEngine(workload.getWorkloadThreads(),new ClickhouseWorkloadGeneratorEngine(configuration,workload));
                         break;
                     case "CASSANDRA":
                     case "SNOWFLAKE":
