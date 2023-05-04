@@ -8,7 +8,6 @@ elasticsearchApiKeyId: <OPTIONAL>
 elasticsearchApiKeySecret: <OPTIONAL>
 keystoreLocation: keystore.jks
 keystorePassword: <REQUIRED>
-purgeOnStart: true
 workloads:
   - workloadName: mortgage_workload
     indexName: mortgage-data

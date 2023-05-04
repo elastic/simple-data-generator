@@ -8,7 +8,6 @@ elasticsearchApiKeyId: <OPTIONAL>
 elasticsearchApiKeySecret: <OPTIONAL>
 keystoreLocation: keystore.jks
 keystorePassword: <REQUIRED>
-purgeOnStart: true
 workloads:
   - workloadName: iot
     indexName: iot-data
