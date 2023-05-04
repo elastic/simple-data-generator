@@ -10,7 +10,7 @@ public class Workload {
     private String indexName;
     private List<Map<String,Object>> fields;
 
-    private int backendBulkQueueDepth;
+    private int elasticsearchBulkQueueDepth;
 
     private Boolean purgeOnStart;
 
@@ -77,12 +77,12 @@ public class Workload {
         this.indexName = indexName;
     }
 
-    public int getBackendBulkQueueDepth() {
-        return backendBulkQueueDepth;
+    public int getElasticsearchBulkQueueDepth() {
+        return elasticsearchBulkQueueDepth;
     }
 
-    public void setBackendBulkQueueDepth(int backendBulkQueueDepth) {
-        this.backendBulkQueueDepth = backendBulkQueueDepth;
+    public void setElasticsearchBulkQueueDepth(int elasticsearchBulkQueueDepth) {
+        this.elasticsearchBulkQueueDepth = elasticsearchBulkQueueDepth;
     }
 
     public Boolean getPurgeOnStart() {

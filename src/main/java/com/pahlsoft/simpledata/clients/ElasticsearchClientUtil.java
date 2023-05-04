@@ -78,16 +78,16 @@ public class ElasticsearchClientUtil implements ClientUtil {
 
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY,
-                new UsernamePasswordCredentials(configuration.getBackendUser(),configuration.getBackendPassword()));
+                new UsernamePasswordCredentials(configuration.getElasticsearchUser(),configuration.getElasticsearchPassword()));
 
-        if (configuration.getBackendScheme().contentEquals("https")) {
+        if (configuration.getElasticsearchScheme().contentEquals("https")) {
             sslBuilder = buildSSLContext(configuration);
             try {
                 sslContext = sslBuilder.build();
             } catch (NoSuchAlgorithmException | KeyManagementException exception) {
                 log.error("No Such Algorithm");
             }
-            if (configuration.getBackendApiKeyEnabled()){
+            if (configuration.getElasticsearchApiKeyEnabled()){
                 restClient = getSecureApiClient(sslContext, configuration).build();
             } else {
                 restClient = getSecureClient(credentialsProvider, sslContext, configuration).build();
@@ -223,7 +223,7 @@ public class ElasticsearchClientUtil implements ClientUtil {
 
     private static RestClientBuilder getSecureClient(CredentialsProvider credentialsProvider, SSLContext sslContext, Configuration configuration) {
         return RestClient.builder(
-                        new HttpHost(configuration.getBackendHost(), configuration.getBackendPort(), configuration.getBackendScheme()))
+                        new HttpHost(configuration.getElasticsearchHost(), configuration.getElasticsearchPort(), configuration.getElasticsearchScheme()))
                 .setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
                     @Override
                     public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
@@ -233,12 +233,12 @@ public class ElasticsearchClientUtil implements ClientUtil {
     }
 
     private static RestClientBuilder getSecureApiClient(SSLContext sslContext, Configuration configuration) {
-        String apiKeyAuth = Base64.getEncoder().encodeToString((configuration.getBackendApiKeyId() + ":" + configuration.getBackendApiKeySecret()).getBytes(StandardCharsets.UTF_8));
+        String apiKeyAuth = Base64.getEncoder().encodeToString((configuration.getElasticsearchApiKeyId() + ":" + configuration.getElasticsearchApiKeySecret()).getBytes(StandardCharsets.UTF_8));
         Collection<Header> defaultHeaders = Collections.singleton((new BasicHeader("Authorization", "ApiKey " + apiKeyAuth)));
 
         //return new RestHighLevelClient(
         return      RestClient.builder(
-                        new HttpHost(configuration.getBackendHost(), configuration.getBackendPort(), configuration.getBackendScheme()))
+                        new HttpHost(configuration.getElasticsearchHost(), configuration.getElasticsearchPort(), configuration.getElasticsearchScheme()))
                 .setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
                     @Override
                     public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
@@ -250,7 +250,7 @@ public class ElasticsearchClientUtil implements ClientUtil {
     private static RestClientBuilder getClient(CredentialsProvider credentialsProvider, Configuration configuration) {
         //return new RestHighLevelClient(
         return      RestClient.builder(
-                        new HttpHost(configuration.getBackendHost(),configuration.getBackendPort(), configuration.getBackendScheme()))
+                        new HttpHost(configuration.getElasticsearchHost(),configuration.getElasticsearchPort(), configuration.getElasticsearchScheme()))
                 .setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
                     @Override
                     public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {

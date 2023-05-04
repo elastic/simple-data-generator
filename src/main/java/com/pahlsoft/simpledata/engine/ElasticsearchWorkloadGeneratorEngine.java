@@ -47,7 +47,7 @@ public class ElasticsearchWorkloadGeneratorEngine implements Engine {
             log.info("Thread[" + Thread.currentThread() + "] Workload Index Replica Shard Count: " + workload.getReplicaShardCount());
             log.info("Thread[" + Thread.currentThread() + "] Purge on Start Setting: " + workload.getPurgeOnStart().toString());
             log.info("Thread[" + Thread.currentThread() + "] Target Index Name: " + workload.getIndexName());
-            log.info("Thread[" + Thread.currentThread() + "] Bulk Queue Depth: " + workload.getBackendBulkQueueDepth());
+            log.info("Thread[" + Thread.currentThread() + "] Bulk Queue Depth: " + workload.getElasticsearchBulkQueueDepth());
         }
 
         //////////////////////////
@@ -56,9 +56,9 @@ public class ElasticsearchWorkloadGeneratorEngine implements Engine {
         boolean engineRun = true;
         while (engineRun) {
             try {
-                try {
+                try {hhh
                     //Bulk Docs
-                    if (workload.getBackendBulkQueueDepth() > 0) {
+                    if (workload.getElasticsearchBulkQueueDepth() > 0) {
                         // Elastic APM
                         Transaction transaction = ElasticApm.startTransaction();
                         setTransactionInfo(transaction,"BulkIndexRequest");
@@ -69,7 +69,7 @@ public class ElasticsearchWorkloadGeneratorEngine implements Engine {
                         ObjectMapper objectMapper = new ObjectMapper();
                         InputStream input;
 
-                        for (int bulkItems = 0; bulkItems < workload.getBackendBulkQueueDepth(); bulkItems++) {
+                        for (int bulkItems = 0; bulkItems < workload.getElasticsearchBulkQueueDepth(); bulkItems++) {
                             input = new ByteArrayInputStream(objectMapper.writeValueAsString(WorkloadGenerator.buildDocument(workload)).getBytes());
                             JsonData jsonp = readJson(input, esClient);
                             br.operations(op -> op

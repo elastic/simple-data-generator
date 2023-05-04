@@ -3,57 +3,57 @@ package com.pahlsoft.simpledata.model;
 import java.util.List;
 
 public class Configuration {
-    private String backendType;
-    private String backendScheme;
-    private String backendHost;
-    private int backendPort;
-    private String backendUser;
-    private String backendPassword;
-    private Boolean backendApiKeyEnabled;
-    private String backendApiKeyId;
-    private String backendApiKeySecret;
+
+    private String elasticsearchScheme;
+    private String elasticsearchHost;
+    private int elasticsearchPort;
+    private String elasticsearchUser;
+    private String elasticsearchPassword;
+    private Boolean elasticsearchApiKeyEnabled;
+    private String elasticsearchApiKeyId;
+    private String elasticsearchApiKeySecret;
     private String keystoreLocation;
     private String keystorePassword;
     private List<Workload> workloads;
 
-    public String getBackendScheme() {
-        return backendScheme;
+    public String getElasticsearchScheme() {
+        return elasticsearchScheme;
     }
 
-    public void setBackendScheme(String backendScheme) {
-        this.backendScheme = backendScheme;
+    public void setHttpScheme(String elasticsearchScheme) {
+        this.elasticsearchScheme = elasticsearchScheme;
     }
 
-    public String getBackendHost() {
-        return backendHost;
+    public String getElasticsearchHost() {
+        return elasticsearchHost;
     }
 
-    public void setBackendHost(String backendHost) {
-        this.backendHost = backendHost;
+    public void setElasticsearchHost(String elasticsearchHost) {
+        this.elasticsearchHost = elasticsearchHost;
     }
 
-    public int getBackendPort() {
-        return backendPort;
+    public int getElasticsearchPort() {
+        return elasticsearchPort;
     }
 
-    public void setBackendPort(int backendPort) {
-        this.backendPort = backendPort;
+    public void setElasticsearchPort(int elasticsearchPort) {
+        this.elasticsearchPort = elasticsearchPort;
     }
 
-    public String getBackendUser() {
-        return backendUser;
+    public String getElasticsearchUser() {
+        return elasticsearchUser;
     }
 
-    public void setBackendUser(String backendUser) {
-        this.backendUser = backendUser;
+    public void setElasticsearchUser(String elasticsearchUser) {
+        this.elasticsearchUser = elasticsearchUser;
     }
 
-    public String getBackendPassword() {
-        return backendPassword;
+    public String getElasticsearchPassword() {
+        return elasticsearchPassword;
     }
 
-    public void setBackendPassword(String backendPassword) {
-        this.backendPassword = backendPassword;
+    public void setElasticsearchPassword(String elasticsearchPassword) {
+        this.elasticsearchPassword = elasticsearchPassword;
     }
 
     public String getKeystoreLocation() {
@@ -81,35 +81,27 @@ public class Configuration {
         this.workloads = workloads;
     }
 
-    public String getBackendApiKeySecret() {
-        return backendApiKeySecret;
+    public String getElasticsearchApiKeySecret() {
+        return elasticsearchApiKeySecret;
     }
 
-    public void setBackendApiKeySecret(String backendApiKeySecret) {
-        this.backendApiKeySecret = backendApiKeySecret;
+    public void setElasticsearchApiKeySecret(String elasticsearchApiKeySecret) {
+        this.elasticsearchApiKeySecret = elasticsearchApiKeySecret;
     }
 
-    public String getBackendApiKeyId() {
-        return backendApiKeyId;
+    public String getElasticsearchApiKeyId() {
+        return elasticsearchApiKeyId;
     }
 
-    public void setBackendApiKeyId(String backendApiKeyId) {
-        this.backendApiKeyId = backendApiKeyId;
+    public void setElasticsearchApiKeyId(String elasticsearchApiKeyId) {
+        this.elasticsearchApiKeyId = elasticsearchApiKeyId;
     }
 
-    public Boolean getBackendApiKeyEnabled() {
-        return backendApiKeyEnabled;
+    public Boolean getElasticsearchApiKeyEnabled() {
+        return elasticsearchApiKeyEnabled;
     }
 
-    public void setBackendApiKeyEnabled(Boolean backendApiKeyEnabled) {
-        this.backendApiKeyEnabled = backendApiKeyEnabled;
-    }
-
-    public String getBackendType() {
-        return backendType;
-    }
-
-    public void setBackendType(String backendType) {
-        this.backendType = backendType;
+    public void setElasticsearchApiKeyEnabled(Boolean elasticsearchApiKeyEnabled) {
+        this.elasticsearchApiKeyEnabled = elasticsearchApiKeyEnabled;
     }
 }
