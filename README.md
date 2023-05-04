@@ -43,17 +43,18 @@ elasticsearchPassword: <REQUIRED>
 elasticsearchApiKeyEnabled: false
 elasticsearchApiKeyId: <OPTIONAL>
 elasticsearchApiKeySecret: <OPTIONAL>
-elasticsearchBulkQueueDepth: 0
 keystoreLocation: keystore.jks
 keystorePassword: <REQUIRED>
-purgeOnStart: true
 workloads:
   - workloadName: workload_1
-    workloadThreads: 1
-    workloadSleep: 1000    
-    primaryShardCount: 3
-    replicaShardCount: 1
     indexName: index-1    
+    workloadThreads: 1
+    workloadSleep: 250
+    primaryShardCount: 3
+    replicaShardCount: 0
+    peakTime: 19:00:00
+    purgeOnStart: true
+    elasticsearchBulkQueueDepth: 0
     fields:
       - name: account_number
         type: int
@@ -76,27 +77,31 @@ elasticsearchPassword: <REQUIRED>
 elasticsearchApiKeyEnabled: false
 elasticsearchApiKeyId: <OPTIONAL>
 elasticsearchApiKeySecret: <OPTIONAL>
-elasticsearchBulkQueueDepth: 0
 keystoreLocation: keystore.jks
 keystorePassword: <REQUIRED>
 workloads:
   - workloadName: workload_1
-    workloadThreads: 1
-    workloadSleep: 1000
-    primaryShardCount: 1
-    replicaShardCount: 1
     indexName: index-1
+    workloadThreads: 1
+    workloadSleep: 250
+    primaryShardCount: 3
+    replicaShardCount: 0
+    peakTime: 19:00:00
+    purgeOnStart: true
+    elasticsearchBulkQueueDepth: 0
     fields:
       - name: account_number
         type: int
    ...
    - workloadName: workload_2
-    workloadThreads: 1
-    workloadSleep: 1000
-    primaryShardCount: 3
-    replicaShardCount: 1
-    purgeExistingIndex: true
-    indexName: index-2
+     indexName: index-2
+     workloadThreads: 1
+     workloadSleep: 250
+     primaryShardCount: 3
+     replicaShardCount: 0
+     peakTime: 19:00:00
+     purgeOnStart: true
+     elasticsearchBulkQueueDepth: 0
     fields:
       - name: inventory_part_number
         type: int
