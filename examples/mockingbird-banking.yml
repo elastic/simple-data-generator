@@ -1,20 +1,23 @@
 elasticsearchScheme: https
-elasticsearchHost: 
+elasticsearchHost: <REQUIRED>
 elasticsearchPort: 9243
 elasticsearchUser: elastic
-elasticsearchPassword: 
-elasticsearchApiKeyId: 
-elasticsearchApiKeySecret: 
+elasticsearchPassword: <REQUIRED>
+elasticsearchApiKeyEnabled: false
+elasticsearchApiKeyId: <OPTIONAL>
+elasticsearchApiKeySecret: <OPTIONAL>
 keystoreLocation: keystore.jks
-keystorePassword: t0ena1ls
-purgeOnStart: true
+keystorePassword: <REQUIRED>
 workloads:
   - workloadName: dda_customer
+    indexName: mbb_customer_info
     workloadThreads: 1
-    workloadSleep: 10
+    workloadSleep: 250
     primaryShardCount: 3
     replicaShardCount: 0
-    indexName: mbb_customer_info
+    peakTime: 19:00:00
+    purgeOnStart: true
+    elasticsearchBulkQueueDepth: 0
     fields:
       - name: eai
         type: double
@@ -27,11 +30,14 @@ workloads:
         type: address
 
   - workloadName: dda_transaction_history
+    indexName: mbb_dda_transaction_history
     workloadThreads: 1
-    workloadSleep: 10
+    workloadSleep: 250
     primaryShardCount: 3
     replicaShardCount: 0
-    indexName: mbb_dda_transaction_history
+    peakTime: 19:00:00
+    purgeOnStart: true
+    elasticsearchBulkQueueDepth: 0
     fields:
       - name: eai
         type: double
@@ -40,11 +46,14 @@ workloads:
         range: -1000000,1000000
 
   - workloadName: customer_support_history
+    indexName: mbb_customer_support_history
     workloadThreads: 1
-    workloadSleep: 1000
+    workloadSleep: 250
     primaryShardCount: 3
     replicaShardCount: 0
-    indexName: mbb_customer_support_history
+    peakTime: 19:00:00
+    purgeOnStart: true
+    elasticsearchBulkQueueDepth: 0
     fields:
       - name: eai
         type: double
@@ -54,11 +63,14 @@ workloads:
         custom_list: Card-Reissue, Check-Balance, Address-Change, Close-Account, Fraud-Dispute, Information-Change
 
   - workloadName: lockbox_service_history
+    indexName: mbb_lockbox_history
     workloadThreads: 1
-    workloadSleep: 1000
+    workloadSleep: 250
     primaryShardCount: 3
     replicaShardCount: 0
-    indexName: mbb_lockbox_history
+    peakTime: 19:00:00
+    purgeOnStart: true
+    elasticsearchBulkQueueDepth: 0
     fields:
       - name: eai
         type: double
@@ -70,11 +82,14 @@ workloads:
         type: date
 
   - workloadName: branch_service_history
+    indexName: mbb_branch_service_history
     workloadThreads: 1
-    workloadSleep: 1000
+    workloadSleep: 250
     primaryShardCount: 3
     replicaShardCount: 0
-    indexName: mbb_branch_service_history
+    peakTime: 19:00:00
+    purgeOnStart: true
+    elasticsearchBulkQueueDepth: 0
     fields:
       - name: eai
         type: double
@@ -87,11 +102,14 @@ workloads:
         range: -1000000,1000000
 
   - workloadName: credit_card_history
+    indexName: mbb_credit_card_history
     workloadThreads: 1
-    workloadSleep: 1000
+    workloadSleep: 250
     primaryShardCount: 3
     replicaShardCount: 0
-    indexName: mbb_credit_card_history
+    peakTime: 19:00:00
+    purgeOnStart: true
+    elasticsearchBulkQueueDepth: 0
     fields:
       - name: eai
         type: double

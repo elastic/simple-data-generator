@@ -1,21 +1,23 @@
 elasticsearchScheme: https
-elasticsearchHost: <COMPLETE_ME>
-elasticsearchPort: <COMPLETE_ME>
-elasticsearchUser: <COMPLETE_ME>
-elasticsearchPassword: <COMPLETE_ME>
+elasticsearchHost: <REQUIRED>
+elasticsearchPort: 9243
+elasticsearchUser: elastic
+elasticsearchPassword: <REQUIRED>
 elasticsearchApiKeyEnabled: false
-elasticsearchApiKeyId: 
-elasticsearchBulkQueueDepth: 1
+elasticsearchApiKeyId: <OPTIONAL>
+elasticsearchApiKeySecret: <OPTIONAL>
 keystoreLocation: keystore.jks
-keystorePassword: t0ena1ls
-purgeOnStart: false
+keystorePassword: <REQUIRED>
 workloads:
   - workloadName: sdg-syslog-test
-    workloadThreads: 5
-    workloadSleep: 10
     indexName: sdg-syslog-data
-    primaryShardCount: 1
+    workloadThreads: 1
+    workloadSleep: 250
+    primaryShardCount: 3
     replicaShardCount: 0
+    peakTime: 19:00:00
+    purgeOnStart: true
+    elasticsearchBulkQueueDepth: 0
     fields:
       - name: priority
       - name: version

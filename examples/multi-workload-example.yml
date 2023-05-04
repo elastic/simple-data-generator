@@ -6,17 +6,19 @@ elasticsearchPassword: <REQUIRED>
 elasticsearchApiKeyEnabled: false
 elasticsearchApiKeyId: <OPTIONAL>
 elasticsearchApiKeySecret: <OPTIONAL>
-elasticsearchBulkQueueDepth: 0
 keystoreLocation: keystore.jks
 keystorePassword: <REQUIRED>
 purgeOnStart: true
 workloads:
   - workloadName: financial_workload
+    indexName: financial-data
     workloadThreads: 1
-    workloadSleep: 1000
+    workloadSleep: 250
     primaryShardCount: 3
     replicaShardCount: 0
-    indexName: financial-data
+    peakTime: 19:00:00
+    purgeOnStart: true
+    elasticsearchBulkQueueDepth: 0
     fields:
       - name: account_number
         type: int
@@ -43,11 +45,14 @@ workloads:
         custom_list: 100000.39, 123114.12, 66666.66
 
   - workloadName: inventory_workload
-    workloadThreads: 2
-    workloadSleep: 1000
+    indexName: inventory-data
+    workloadThreads: 1
+    workloadSleep: 250
     primaryShardCount: 3
     replicaShardCount: 0
-    indexName: inventory-data
+    peakTime: 19:00:00
+    purgeOnStart: true
+    elasticsearchBulkQueueDepth: 0
     fields:
       - name: item_number
         type: int

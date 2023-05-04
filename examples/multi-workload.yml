@@ -6,27 +6,32 @@ elasticsearchPassword: <REQUIRED>
 elasticsearchApiKeyEnabled: false
 elasticsearchApiKeyId: <OPTIONAL>
 elasticsearchApiKeySecret: <OPTIONAL>
-elasticsearchBulkQueueDepth: 0
 keystoreLocation: keystore.jks
 keystorePassword: <REQUIRED>
 purgeOnStart: true
 workloads:
   - workloadName: iot
-    workloadThreads: 2
+    indexName: iot-data
+    workloadThreads: 1
     workloadSleep: 250
     primaryShardCount: 3
     replicaShardCount: 0
-    indexName: iot-data
+    peakTime: 19:00:00
+    purgeOnStart: true
+    elasticsearchBulkQueueDepth: 0
     fields:
       - name: temperature
         type: int
         range: 0,120
   - workloadName: mortgage
+    indexName: mortgage-data
     workloadThreads: 1
-    workloadSleep: 1000
+    workloadSleep: 250
     primaryShardCount: 3
     replicaShardCount: 0
-    indexName: mortgage-data
+    peakTime: 19:00:00
+    purgeOnStart: true
+    elasticsearchBulkQueueDepth: 0
     fields:
       - name: loan.platform
         type: random_string_from_list
