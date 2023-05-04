@@ -45,7 +45,6 @@ elasticsearchApiKeyId: <OPTIONAL>
 elasticsearchApiKeySecret: <OPTIONAL>
 keystoreLocation: keystore.jks
 keystorePassword: <REQUIRED>
-purgeOnStart: true
 workloads:
   - workloadName: workload_1
     indexName: index-1    
