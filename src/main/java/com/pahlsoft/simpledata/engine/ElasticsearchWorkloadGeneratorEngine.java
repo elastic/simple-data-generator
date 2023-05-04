@@ -56,7 +56,7 @@ public class ElasticsearchWorkloadGeneratorEngine implements Engine {
         boolean engineRun = true;
         while (engineRun) {
             try {
-                try {hhh
+                try {
                     //Bulk Docs
                     if (workload.getElasticsearchBulkQueueDepth() > 0) {
                         // Elastic APM
