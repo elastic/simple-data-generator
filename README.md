@@ -8,8 +8,13 @@ It's completely YAML driven. Yay Yaml!!!
 Note: This code should not be used as a benchmarking tool for your Elasticsearch instances. You should use a tool like Elastic's Rally (https://github.com/elastic/rally).  This tool, is for just loading a **bunch** of random data (closer to what YOU are going to put in Production) so you can become familiar with the query DSL, or Kibana or Maps or Aggregations. **OR!!!** just demonstrate how effective your data analysis will be streaming to the Elastic stack.
 
 ## Requirements
-* Java OpenJDK
-* Gradle
+To Build & Run
+* Gradle (7.6)
+* Java OpenJDK (17+)
+
+To Run
+* Java OpenJDK (17+)
+
 
 # Setup 
 
